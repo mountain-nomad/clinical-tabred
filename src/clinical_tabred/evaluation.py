@@ -14,8 +14,6 @@ from sklearn.metrics import (
 
 logger = logging.getLogger("clinical_tabred")
 
-METRIC_COLUMNS = ["accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc", "brier"]
-
 
 def safe_ratio(numerator: float, denominator: float, name: str) -> float:
     """Divide, but return NaN (and log a warning) instead of crashing or writing 0."""

@@ -260,19 +260,22 @@ FIGURES = [("01_dataset_characteristics", plot_dataset_characteristics),
            ("09_ablation", plot_ablation)]
 
 
+def save_figure(fig, out_dir: Path, name: str, formats: list[str]) -> list[Path]:
+    """Save one figure as e.g. PNG (300 DPI) and PDF; returns the written paths."""
+    Path(out_dir).mkdir(parents=True, exist_ok=True)
+    paths = [Path(out_dir) / f"{name}.{fmt}" for fmt in formats]
+    for path in paths:
+        fig.savefig(path, dpi=300, bbox_inches="tight")
+    return paths
+
+
 def make_all_figures(results_dir: Path, out_dir: Path, style: str, formats: list[str],
-                     prefix: str = "fig", close: bool = True) -> list[Path]:
-    """Draw every figure from the CSVs in `results_dir` and save it in each format (300 DPI)."""
+                     prefix: str = "fig") -> list[Path]:
+    """Draw every figure from the CSVs in `results_dir` and save it in each format."""
     apply_style(style)
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
     saved = []
     for name, plot in FIGURES:
         fig = plot(results_dir, style)
-        for fmt in formats:
-            path = out_dir / f"{prefix}{name}.{fmt}"
-            fig.savefig(path, dpi=300, bbox_inches="tight")
-            saved.append(path)
-        if close:
-            plt.close(fig)
+        saved += save_figure(fig, out_dir, f"{prefix}{name}", formats)
+        plt.close(fig)
     return saved

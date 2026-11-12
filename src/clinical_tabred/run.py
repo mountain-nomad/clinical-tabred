@@ -5,7 +5,6 @@ Example:
 """
 
 import argparse
-import json
 import logging
 import time
 from pathlib import Path
@@ -13,15 +12,18 @@ from pathlib import Path
 import yaml
 
 from clinical_tabred.benchmark import (
+    package_versions,
     quick_config,
     run_all_protocols,
     run_cv_all,
     run_uncertainty,
     save_protocol_results,
+    save_selected_models,
     select_best_model,
     summarize_random_seeds,
     write_run_metadata,
 )
+from clinical_tabred.build_notebook import PACKAGES, build_notebook
 from clinical_tabred.download import download_all
 from clinical_tabred.drift import run_drift
 from clinical_tabred.experiment import base_settings, run_ablation
@@ -93,11 +95,7 @@ def stage_train(config: dict, quick: bool) -> None:
     ablation.to_csv(results_dir / "ablation.csv", index=False)
     run_cv_all(runs, config, results_dir)
     run_uncertainty(tables["predictions"], best, config, results_dir)
-    selected = {"best_model": best, "params": {f"{p}_seed{s}": out["params"]
-                                               for (p, s), out in runs["outputs"].items()},
-                "thresholds": {f"{p}_seed{s}": out["thresholds"]
-                               for (p, s), out in runs["outputs"].items()}}
-    (results_dir / "selected_models.json").write_text(json.dumps(selected, indent=2))
+    save_selected_models(runs, best, config, results_dir)
 
 
 def stage_drift(config: dict, quick: bool) -> None:
@@ -113,6 +111,14 @@ def stage_figures(config: dict) -> None:
     logger.info("Saved %d figure files to %s", len(saved), paths["figures_dir"])
 
 
+def stage_notebook(config: dict) -> None:
+    """Rebuild the standalone notebook from the current source code and templates."""
+    versions = package_versions(list(PACKAGES.values()))
+    path = Path("notebooks") / config["project"]["notebook_name"]
+    build_notebook(config, Path("notebooks/templates"), path, versions)
+    logger.info("Notebook written to %s (execute it with jupyter nbconvert)", path)
+
+
 def run_stage(stage: str, config: dict, quick: bool) -> None:
     """Dispatch one stage by name."""
     if stage == "download":
@@ -125,6 +131,8 @@ def run_stage(stage: str, config: dict, quick: bool) -> None:
         stage_drift(config, quick)
     elif stage == "figures":
         stage_figures(config)
+    elif stage == "notebook":
+        stage_notebook(config)
     else:
         raise ValueError(f"Unknown stage '{stage}'. Choose from {STAGES + ['all']}.")
 

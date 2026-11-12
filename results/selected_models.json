@@ -1,5 +1,6 @@
 {
   "best_model": "xgboost",
+  "seed": 42,
   "params": {
     "temporal_seed42": {
       "logreg": {

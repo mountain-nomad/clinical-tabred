@@ -106,6 +106,16 @@ def select_best_model(metrics: pd.DataFrame) -> str:
     return val.sort_values(["pr_auc", "roc_auc"], ascending=False).iloc[0]["model"]
 
 
+def save_selected_models(runs: dict, best: str, config: dict, results_dir: Path) -> dict:
+    """Save the best model name, chosen hyperparameters and thresholds to JSON."""
+    outputs = runs["outputs"].items()
+    selected = {"best_model": best, "seed": config["seed"],
+                "params": {f"{p}_seed{s}": out["params"] for (p, s), out in outputs},
+                "thresholds": {f"{p}_seed{s}": out["thresholds"] for (p, s), out in outputs}}
+    (Path(results_dir) / "selected_models.json").write_text(json.dumps(selected, indent=2))
+    return selected
+
+
 def run_cv_all(runs: dict, config: dict, results_dir: Path) -> pd.DataFrame:
     """5-fold CV on protocol A's training cycle and on protocol B's train+validation."""
     settings = base_settings(config)

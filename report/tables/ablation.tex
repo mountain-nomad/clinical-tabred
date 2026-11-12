@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Ablation of the validation-selected model on the 2015-2016 test set.}
+\label{tab:ablation}
+\begin{tabular}{lrrrrrr}
+\toprule
+Configuration & ROC-AUC & PR-AUC & F1 & $\Delta$ROC-AUC & $\Delta$PR-AUC & $\Delta$F1 \\
+\midrule
+full model & 0.791 & 0.368 & 0.444 & +0.000 & +0.000 & +0.000 \\
+without demographic features & 0.705 & 0.265 & 0.356 & -0.086 & -0.103 & -0.088 \\
+without socioeconomic features & 0.792 & 0.369 & 0.441 & +0.000 & +0.001 & -0.003 \\
+without anthropometric features & 0.748 & 0.297 & 0.396 & -0.043 & -0.071 & -0.048 \\
+no class-imbalance handling & 0.789 & 0.364 & 0.440 & -0.002 & -0.005 & -0.005 \\
+threshold 0.5 instead of tuned & 0.791 & 0.368 & 0.429 & +0.000 & +0.000 & -0.015 \\
+\bottomrule
+\end{tabular}
+\end{table*}
