@@ -13,9 +13,14 @@ from pathlib import Path
 import pandas as pd
 
 from clinical_tabred.evaluation import ci_table, gap_table, paired_comparisons
-from clinical_tabred.experiment import base_settings, cross_validate, run_ablation, run_protocol
-from clinical_tabred.splits import (check_no_overlap, describe_splits, in_period_split,
-                                    random_split, temporal_split)
+from clinical_tabred.experiment import base_settings, cross_validate, run_protocol
+from clinical_tabred.splits import (
+    check_no_overlap,
+    describe_splits,
+    in_period_split,
+    random_split,
+    temporal_split,
+)
 
 logger = logging.getLogger("clinical_tabred")
 
@@ -159,8 +164,8 @@ def hardware_info() -> dict:
     try:
         if sys.platform == "darwin":
             info["cpu_model"] = subprocess.run(["sysctl", "-n", "machdep.cpu.brand_string"],
-                                               capture_output=True, text=True).stdout.strip()
-            ram = int(subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True,
+                                               capture_output=True, text=True, check=False).stdout.strip()
+            ram = int(subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True, check=False,
                                      text=True).stdout)
         else:
             ram = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")

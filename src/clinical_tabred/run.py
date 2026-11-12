@@ -12,13 +12,27 @@ from pathlib import Path
 
 import yaml
 
-from clinical_tabred.benchmark import (quick_config, run_all_protocols, run_cv_all,
-                                       run_uncertainty, save_protocol_results, select_best_model,
-                                       summarize_random_seeds, write_run_metadata)
+from clinical_tabred.benchmark import (
+    quick_config,
+    run_all_protocols,
+    run_cv_all,
+    run_uncertainty,
+    save_protocol_results,
+    select_best_model,
+    summarize_random_seeds,
+    write_run_metadata,
+)
 from clinical_tabred.download import download_all
+from clinical_tabred.drift import run_drift
 from clinical_tabred.experiment import base_settings, run_ablation
-from clinical_tabred.prepare import (build_dataset, load_processed, missingness_table,
-                                     save_processed, subsample_per_cycle)
+from clinical_tabred.plotting import make_all_figures
+from clinical_tabred.prepare import (
+    build_dataset,
+    load_processed,
+    missingness_table,
+    save_processed,
+    subsample_per_cycle,
+)
 
 logger = logging.getLogger("clinical_tabred")
 STAGES = ["download", "prepare", "train", "drift", "figures", "report", "presentation",
@@ -86,6 +100,19 @@ def stage_train(config: dict, quick: bool) -> None:
     (results_dir / "selected_models.json").write_text(json.dumps(selected, indent=2))
 
 
+def stage_drift(config: dict, quick: bool) -> None:
+    """Compare feature distributions and prevalence between cycles."""
+    run_drift(load_dataset(config, quick), config, config["paths"]["results_dir"])
+
+
+def stage_figures(config: dict) -> None:
+    """Export all figures (PDF + 300-DPI PNG) from the saved result CSVs."""
+    paths = config["paths"]
+    saved = make_all_figures(Path(paths["results_dir"]), Path(paths["figures_dir"]), "paper",
+                             ["pdf", "png"])
+    logger.info("Saved %d figure files to %s", len(saved), paths["figures_dir"])
+
+
 def run_stage(stage: str, config: dict, quick: bool) -> None:
     """Dispatch one stage by name."""
     if stage == "download":
@@ -94,6 +121,10 @@ def run_stage(stage: str, config: dict, quick: bool) -> None:
         stage_prepare(config)
     elif stage == "train":
         stage_train(config, quick)
+    elif stage == "drift":
+        stage_drift(config, quick)
+    elif stage == "figures":
+        stage_figures(config)
     else:
         raise ValueError(f"Unknown stage '{stage}'. Choose from {STAGES + ['all']}.")
 

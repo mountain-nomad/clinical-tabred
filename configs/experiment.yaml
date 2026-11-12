@@ -53,6 +53,17 @@ data:
     socioeconomic: [DMDEDUC2, INDFMPIR]
     anthropometric: [BMXBMI, BMXWAIST, BMXHT, BMXWT]
   prevalence_bounds: [0.05, 0.25]
+  # Human-readable labels for categorical codes (from the official NHANES codebooks).
+  category_labels:
+    RIAGENDR: {1: "Male", 2: "Female"}
+    RIDRETH3: {1: "Mexican American", 2: "Other Hispanic", 3: "Non-Hispanic White",
+               4: "Non-Hispanic Black", 6: "Non-Hispanic Asian", 7: "Other/multi-racial"}
+    DMDEDUC2: {1: "Less than 9th grade", 2: "9-11th grade", 3: "High school/GED",
+               4: "Some college/AA", 5: "College graduate+"}
+
+drift:
+  reference_cycle: "2011-2012"
+  psi_bins: 10
 
 protocols:
   temporal: {train: "2011-2012", val: "2013-2014", test: "2015-2016"}
