@@ -14,7 +14,6 @@
 - None: every slide has real content.
 
 ## [REVIEW] passages (rewrite in your own words)
-- : Every number below is generated from the results folder. Sentences marked [REVIEW] must be rewritten by the students.
 - Slide 3 — Abstract: - Conclusion: [REVIEW] Domain-classifier ROC-AUC 0.582; the random-vs-chronological gap is inconclusive (the 95% CI includes zero); the in-period-vs-future gap 
 - Slide 3 — Abstract: One sentence each for aim, method, result and conclusion. [REVIEW] Explain in your own words why the CIs matter for the conclusion.
 - Slide 4 — Problem, Motivation and Objectives: Introduce the deployment-over-time problem with the TabReD motivation [1]. [REVIEW] Say why diabetes in NHANES is a reasonable small test case.

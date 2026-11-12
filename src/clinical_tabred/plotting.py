@@ -161,8 +161,9 @@ def plot_roc_curves(results_dir: Path, style: str):
         ax.plot(fpr, tpr, color=MODEL_COLORS[model], lw=2, label=label)
     ax.plot([0, 1], [0, 1], ls="--", color=MUTED, lw=1, label="Chance")
     ax.set(xlabel="False positive rate", ylabel="True positive rate",
-           title="ROC curves, chronological test set (2015-2016)", aspect="equal")
-    ax.legend(loc="lower right")
+           title="ROC curves, 2015-2016 test", aspect="equal")
+    # Legend outside the axes so it never covers the curves.
+    ax.legend(loc="center left", bbox_to_anchor=(1.02, 0.5))
     fig.tight_layout()
     return fig
 

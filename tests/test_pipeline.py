@@ -27,3 +27,16 @@ def test_quick_run_produces_metrics(test_config, tmp_path):
         assert (results / f"{name}.csv").exists(), name
     folds = pd.read_csv(results / "cv_folds.csv")
     assert set(folds["fold"]) == {1, 2, 3, 4, 5}
+
+
+def test_quick_mode_never_overwrites_report_slides_or_notebook(monkeypatch):
+    import sys
+
+    import pytest
+
+    from clinical_tabred import run
+
+    monkeypatch.setattr(sys, "argv", ["run", "--stage", "notebook", "--quick"])
+    with pytest.raises(SystemExit):
+        run.main()
+    assert set(run.REPO_OUTPUT_STAGES) == {"report", "presentation", "notebook"}

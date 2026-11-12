@@ -51,6 +51,7 @@ from clinical_tabred.report_tables import (
 logger = logging.getLogger("clinical_tabred")
 STAGES = ["download", "prepare", "train", "drift", "figures", "report", "presentation",
           "notebook"]
+REPO_OUTPUT_STAGES = ["report", "presentation", "notebook"]
 
 
 def load_config(path: Path, quick: bool) -> dict:
@@ -200,6 +201,12 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     config = load_config(Path(args.config), args.quick)
     stages = STAGES if args.stage == "all" else [args.stage]
+    if args.quick:
+        # These stages write to fixed project files (report, slides, notebook), so a smoke
+        # test must never run them: they always use the full results.
+        if args.stage in REPO_OUTPUT_STAGES:
+            parser.error(f"--stage {args.stage} cannot be combined with --quick")
+        stages = [s for s in stages if s not in REPO_OUTPUT_STAGES]
     runtimes = {}
     for stage in stages:
         start = time.perf_counter()

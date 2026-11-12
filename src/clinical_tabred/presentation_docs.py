@@ -213,6 +213,8 @@ def write_placeholders(slides_path: Path, render_note: str, out_path: Path) -> N
     for line in Path(slides_path).read_text().splitlines():
         if line.startswith("## Slide"):
             current = line[3:]
+        if not current:  # skip the file header before the first slide
+            continue
         if "[REVIEW]" in line:
             review.append(f"- {current}: {line.strip()[:160]}")
         if "TODO" in line:
