@@ -1,0 +1,73 @@
+{
+  "SEQN": {
+    "role": "id",
+    "dtype": "int64"
+  },
+  "cycle": {
+    "role": "metadata",
+    "dtype": "str"
+  },
+  "WTINT2YR": {
+    "role": "survey_weight_metadata",
+    "dtype": "float64"
+  },
+  "RIDAGEYR": {
+    "role": "numeric_feature",
+    "dtype": "float64"
+  },
+  "INDFMPIR": {
+    "role": "numeric_feature",
+    "dtype": "float64"
+  },
+  "BMXBMI": {
+    "role": "numeric_feature",
+    "dtype": "float64"
+  },
+  "BMXWAIST": {
+    "role": "numeric_feature",
+    "dtype": "float64"
+  },
+  "BMXHT": {
+    "role": "numeric_feature",
+    "dtype": "float64"
+  },
+  "BMXWT": {
+    "role": "numeric_feature",
+    "dtype": "float64"
+  },
+  "RIAGENDR": {
+    "role": "categorical_feature",
+    "dtype": "Int64",
+    "categories": [
+      1,
+      2
+    ]
+  },
+  "RIDRETH3": {
+    "role": "categorical_feature",
+    "dtype": "Int64",
+    "categories": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      7
+    ]
+  },
+  "DMDEDUC2": {
+    "role": "categorical_feature",
+    "dtype": "Int64",
+    "categories": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "label": {
+    "role": "target",
+    "dtype": "Int64"
+  }
+}

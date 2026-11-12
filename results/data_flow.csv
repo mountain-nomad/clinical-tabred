@@ -1,0 +1,16 @@
+step,cycle,rows,removed,reason
+1_demographics,2011-2012,9756,0,all DEMO respondents
+2_adults,2011-2012,5560,4196,age below 20 years
+3_has_exam,2011-2012,5319,241,no body-measurement (BMX) record: interview only
+4_has_diq,2011-2012,5319,0,no diabetes questionnaire (DIQ) record
+5_valid_label,2011-2012,5202,117,DIQ010 is 3/7/9 or missing
+1_demographics,2013-2014,10175,0,all DEMO respondents
+2_adults,2013-2014,5769,4406,age below 20 years
+3_has_exam,2013-2014,5588,181,no body-measurement (BMX) record: interview only
+4_has_diq,2013-2014,5588,0,no diabetes questionnaire (DIQ) record
+5_valid_label,2013-2014,5416,172,DIQ010 is 3/7/9 or missing
+1_demographics,2015-2016,9971,0,all DEMO respondents
+2_adults,2015-2016,5719,4252,age below 20 years
+3_has_exam,2015-2016,5474,245,no body-measurement (BMX) record: interview only
+4_has_diq,2015-2016,5474,0,no diabetes questionnaire (DIQ) record
+5_valid_label,2015-2016,5346,128,DIQ010 is 3/7/9 or missing
