@@ -3,7 +3,7 @@
   "metric_rows_notebook": 220,
   "metric_rows_matched": 220,
   "tolerance": 1e-09,
-  "max_abs_diff_metrics": 2.7755575615628914e-17,
+  "max_abs_diff_metrics": 1.1102230246251565e-16,
   "max_abs_diff_ablation": 0.0,
   "max_abs_diff_cv_metrics": 0.0,
   "max_abs_diff_metrics_ci": 0.0,

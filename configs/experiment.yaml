@@ -9,8 +9,8 @@ project:
   title: "Clinical TabReD Lite"
   full_title: "Evaluating Tabular Machine Learning Models under Temporal Distribution Shift in Healthcare Data"
   students:
-    - {name: "STUDENT_NAME_1", id: "STUDENT_ID_1"}
-    - {name: "STUDENT_NAME_2", id: "STUDENT_ID_2"}
+    - {name: "Nurbek Baktygali", id: "STUDENT_ID_1"}
+    - {name: "Yelzhan Rakhimzhanov", id: "STUDENT_ID_2"}
   instructor: "Dr. Hari Mohan Rai, Assistant Professor, Department of Computer Science, SCAI, Nazarbayev University"
 
 seed: 42

@@ -12,8 +12,8 @@ Content:
 - Title: Clinical TabReD Lite
 - Subtitle: Evaluating Tabular Machine Learning Models under Temporal Distribution Shift in Healthcare Data
 - Submitted by:
-- STUDENT_NAME_1, STUDENT_ID_1
-- STUDENT_NAME_2, STUDENT_ID_2
+- Nurbek Baktygali, STUDENT_ID_1
+- Yelzhan Rakhimzhanov, STUDENT_ID_2
 - Submitted to: Dr. Hari Mohan Rai, Assistant Professor, Department of Computer Science, SCAI, Nazarbayev University
 - Footer: CSCI 447 Machine Learning: Theory and Practice   |   Project ID: P034   |   Clinical TabReD Lite
 Visuals: none
@@ -376,7 +376,7 @@ Presenter: 2
 Content:
 Thank You
 Questions and discussion
-STUDENT_NAME_1 · STUDENT_NAME_2   |   Project ID: P034   |   CSCI 447, Nazarbayev University
+Nurbek Baktygali · Yelzhan Rakhimzhanov   |   Project ID: P034   |   CSCI 447, Nazarbayev University
 Visuals: none
 Caption: none
 Big numbers: none

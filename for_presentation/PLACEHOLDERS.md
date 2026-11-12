@@ -1,7 +1,7 @@
 # Placeholders and items to check
 
 ## Names and IDs (keep exactly as written until replaced)
-- `STUDENT_NAME_1`, `STUDENT_ID_1`, `STUDENT_NAME_2`, `STUDENT_ID_2` (slides 1 and 28, report, notebook title cell).
+- Student IDs `STUDENT_ID_1` (Nurbek Baktygali) and `STUDENT_ID_2` (Yelzhan Rakhimzhanov) (slides 1 and 28, report, notebook title cell).
 - Notebook file name `CSCI447P034.ipynb`: the sample deck's notes say the notebook must be named `<ProjectID>.ipynb` (i.e. possibly `P034.ipynb`). Check the course rule.
 
 ## TO VERIFY
