@@ -25,7 +25,7 @@ def apply_style(style: str) -> None:
     """Set matplotlib defaults. 'paper' for the report/notebook, 'slide' for 16:9 slides."""
     fonts = [f for f in ["Calibri", "Carlito", "Arial", "DejaVu Sans"]
              if f in {entry.name for entry in font_manager.fontManager.ttflist}]
-    base = 15 if style == "slide" else 10
+    base = 16 if style == "slide" else 10
     plt.rcParams.update({
         "font.family": fonts[0], "font.size": base, "axes.titlesize": base + 2,
         "axes.labelsize": base, "xtick.labelsize": base - 1, "ytick.labelsize": base - 1,
@@ -38,8 +38,9 @@ def apply_style(style: str) -> None:
 
 
 def figure_size(style: str, height_ratio: float = 0.45) -> tuple[float, float]:
-    """Width x height in inches: wide 16:9-friendly for slides, column width for paper."""
-    width = 12.0 if style == "slide" else 7.0
+    """Width x height in inches. Slide figures are drawn at their final size on a 16:9 slide
+    (about 8.6 in wide), so 15 pt text stays at least 14 pt when placed."""
+    width = 8.6 if style == "slide" else 7.0
     return width, width * height_ratio
 
 
@@ -111,7 +112,7 @@ def plot_auc_with_ci(results_dir: Path, style: str):
                         textcoords="offset points", va="center", color=INK)
         ax.set_yticks(range(len(order)), [MODEL_LABELS[m] for m in order])
         ax.invert_yaxis()
-        ax.set(title=f"{title} on 2015-2016 (95% CI)", xlabel=title)
+        ax.set(title=f"{title} (95% CI)", xlabel=f"{title}, 2015-2016 test")
         ax.margins(x=0.25)
     axes[1].set_yticklabels([])
     fig.tight_layout()
@@ -145,8 +146,7 @@ def plot_protocol_comparison(results_dir: Path, style: str):
     ax.set_yticks(range(len(order)), [MODEL_LABELS[m] for m in order])
     ax.invert_yaxis()
     ax.set(xlabel="Test ROC-AUC", title="Random vs in-period vs chronological evaluation")
-    bottom_legend(fig, ax, ncol=3 if style == "slide" else 2,
-                  height=0.12 if style == "slide" else 0.15)
+    bottom_legend(fig, ax, ncol=2, height=0.2 if style == "slide" else 0.15)
     return fig
 
 

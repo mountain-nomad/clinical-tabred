@@ -38,6 +38,7 @@ from clinical_tabred.prepare import (
     save_processed,
     subsample_per_cycle,
 )
+from clinical_tabred.presentation_pack import build_pack
 from clinical_tabred.report_tables import (
     write_captions,
     write_extra_tables,
@@ -153,6 +154,12 @@ def compile_report(report_dir: Path) -> None:
     logger.info("Compiled %s/main.pdf with %s", report_dir, command[0])
 
 
+def stage_presentation(config: dict) -> None:
+    """Build the self-contained for_presentation/ pack from results and figures code."""
+    build_pack(Path(config["paths"]["results_dir"]), config, Path("for_presentation"))
+    logger.info("Presentation pack written to for_presentation/")
+
+
 def stage_notebook(config: dict) -> None:
     """Rebuild the standalone notebook from the current source code and templates."""
     versions = package_versions(list(PACKAGES.values()))
@@ -175,6 +182,8 @@ def run_stage(stage: str, config: dict, quick: bool) -> None:
         stage_figures(config)
     elif stage == "report":
         stage_report(config)
+    elif stage == "presentation":
+        stage_presentation(config)
     elif stage == "notebook":
         stage_notebook(config)
     else:
@@ -197,8 +206,9 @@ def main() -> None:
         logger.info("=== Stage: %s ===", stage)
         run_stage(stage, config, args.quick)
         runtimes[stage] = round(time.perf_counter() - start, 1)
-    write_run_metadata(config, Path(config["paths"]["results_dir"]),
-                       {"quick": args.quick, "stage_runtimes_s": runtimes})
+        # Written after every stage: later stages (report, presentation) read this file.
+        write_run_metadata(config, Path(config["paths"]["results_dir"]),
+                           {"quick": args.quick, "stage_runtimes_s": runtimes})
 
 
 if __name__ == "__main__":
