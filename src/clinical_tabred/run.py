@@ -6,6 +6,8 @@ Example:
 
 import argparse
 import logging
+import shutil
+import subprocess
 import time
 from pathlib import Path
 
@@ -24,6 +26,7 @@ from clinical_tabred.benchmark import (
     write_run_metadata,
 )
 from clinical_tabred.build_notebook import PACKAGES, build_notebook
+from clinical_tabred.diagrams import make_all_diagrams
 from clinical_tabred.download import download_all
 from clinical_tabred.drift import run_drift
 from clinical_tabred.experiment import base_settings, run_ablation
@@ -34,6 +37,14 @@ from clinical_tabred.prepare import (
     missingness_table,
     save_processed,
     subsample_per_cycle,
+)
+from clinical_tabred.report_tables import (
+    write_captions,
+    write_extra_tables,
+    write_literature_tables,
+    write_model_comparison_md,
+    write_number_macros,
+    write_report_tables,
 )
 
 logger = logging.getLogger("clinical_tabred")
@@ -111,6 +122,37 @@ def stage_figures(config: dict) -> None:
     logger.info("Saved %d figure files to %s", len(saved), paths["figures_dir"])
 
 
+def stage_report(config: dict) -> None:
+    """Generate report tables, number macros, literature tables, diagrams; compile the PDF."""
+    results, figures = Path(config["paths"]["results_dir"]), Path(config["paths"]["figures_dir"])
+    tables = Path("report/tables")
+    tables.mkdir(parents=True, exist_ok=True)
+    write_literature_tables(results, Path("report/literature"))
+    write_report_tables(results, tables)
+    write_extra_tables(results, Path("report/timeline.csv"), tables)
+    write_number_macros(results, tables / "numbers.tex")
+    write_model_comparison_md(results)
+    write_captions(figures)
+    make_all_diagrams(figures, ["pdf", "png"])
+    compile_report(Path("report"))
+
+
+def compile_report(report_dir: Path) -> None:
+    """Compile report/main.tex with latexmk or tectonic; log clearly if neither exists."""
+    if shutil.which("latexmk"):
+        command = ["latexmk", "-pdf", "-interaction=nonstopmode", "main.tex"]
+    elif shutil.which("tectonic"):
+        command = ["tectonic", "--keep-logs", "main.tex"]
+    else:
+        logger.warning("No LaTeX engine (latexmk/tectonic) found: report/main.tex not compiled.")
+        return
+    result = subprocess.run(command, cwd=report_dir, capture_output=True, text=True, check=False)
+    if result.returncode != 0:
+        raise RuntimeError(f"LaTeX compilation failed:\n{result.stdout[-3000:]}\n"
+                           f"{result.stderr[-3000:]}")
+    logger.info("Compiled %s/main.pdf with %s", report_dir, command[0])
+
+
 def stage_notebook(config: dict) -> None:
     """Rebuild the standalone notebook from the current source code and templates."""
     versions = package_versions(list(PACKAGES.values()))
@@ -131,6 +173,8 @@ def run_stage(stage: str, config: dict, quick: bool) -> None:
         stage_drift(config, quick)
     elif stage == "figures":
         stage_figures(config)
+    elif stage == "report":
+        stage_report(config)
     elif stage == "notebook":
         stage_notebook(config)
     else:
