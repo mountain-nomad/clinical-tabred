@@ -221,8 +221,8 @@ def write_placeholders(slides_path: Path, render_note: str, out_path: Path) -> N
             todo.append(f"- {current}: {line.strip()[:160]}")
     text = "\n".join([
         "# Placeholders and items to check", "",
-        "## Names and IDs (keep exactly as written until replaced)",
-        ("- Student IDs `STUDENT_ID_1` (Nurbek Baktygali) and `STUDENT_ID_2` (Yelzhan Rakhimzhanov) (slides 1 and 28, "
+        "## Names and IDs",
+        ("- Filled in: Nurbek Baktygali (202127847), Yelzhan Rakhimzhanov (202197093) (slides 1 and 28, "
         "report, notebook title cell)."),
         ("- Notebook file name `CSCI447P034.ipynb`: the sample deck's notes say the notebook must "
         "be named `<ProjectID>.ipynb` (i.e. possibly `P034.ipynb`). Check the course rule."), "",

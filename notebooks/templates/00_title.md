@@ -3,7 +3,7 @@
 
 **Course:** CSCI 447 Machine Learning: Theory and Practice, Fall 2026  
 **Project ID:** P034  
-**Students:** Nurbek Baktygali (STUDENT_ID_1), Yelzhan Rakhimzhanov (STUDENT_ID_2)  
+**Students:** Nurbek Baktygali (202127847), Yelzhan Rakhimzhanov (202197093)  
 **Instructor:** Dr. Hari Mohan Rai, Assistant Professor, Department of Computer Science, SCAI, Nazarbayev University
 
 This notebook is **self-contained**: it downloads the public NHANES data, prepares it, trains five models,
