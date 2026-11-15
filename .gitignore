@@ -17,3 +17,9 @@ report/*.fdb_latexmk
 .DS_Store
 results_quick/
 figures_quick/
+
+# Large generated table (rebuild with: python scripts/build_wide_table.py)
+data/processed/nhanes_wide_2005_2018.csv
+
+# BRFSS raw files (download with scripts/download_brfss.ps1)
+data/raw/brfss/

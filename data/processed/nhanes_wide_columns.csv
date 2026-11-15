@@ -1,0 +1,281 @@
+feature,component,label,missing_pct,n_unique
+ALQ130,ALQ,Avg # alcoholic drinks/day -past 12 mos,39.7,30
+BMXARMC,BMX,Arm Circumference (cm),4.9,382
+BMXARML,BMX,Upper Arm Length (cm),4.9,199
+BMXBMI,BMX,Body Mass Index (kg/m**2),1.5,3134
+BMXHT,BMX,Standing Height (cm),1.3,619
+BMXLEG,BMX,Upper Leg Length (cm),6.2,281
+BMXWAIST,BMX,Waist Circumference (cm),6.0,997
+BMXWT,BMX,Weight (kg),1.3,1365
+BPQ020,BPQ,Ever told you had high blood pressure,0.1,2
+BPQ030,BPQ,Told had high blood pressure - 2+ times,64.9,2
+BPQ040A,BPQ,Taking prescription for hypertension,64.7,2
+BPQ050A,BPQ,Now taking prescribed medicine for HBP,69.2,2
+BPQ060,BPQ,Ever had blood cholesterol checked,21.7,2
+BPQ070,BPQ,When blood cholesterol last checked,27.1,4
+BPQ080,BPQ,Doctor told you - high cholesterol level,13.8,2
+BPXDI1,BPX,Diastolic:  Blood pres (1st rdg) mm Hg,8.9,62
+BPXDI2,BPX,Diastolic: Blood pres (2nd rdg) mm Hg,7.9,65
+BPXDI3,BPX,Diastolic: Blood pres (3rd rdg) mm Hg,8.3,67
+BPXDI4,BPX,Diastolic:  Blood pres (4th rdg) mm Hg,93.4,57
+BPXML1,BPX,MIL: maximum inflation levels (mm Hg),4.2,37
+BPXPLS,BPX,60 sec. pulse (30 sec. pulse * 2):,4.1,57
+BPXPTY,BPX,Pulse type:,4.0,2
+BPXPULS,BPX,Pulse regular or irregular?,4.0,2
+BPXSY1,BPX,Systolic:  Blood pres (1st rdg) mm Hg,8.9,85
+BPXSY2,BPX,Systolic:  Blood pres (2nd rdg) mm Hg,7.9,86
+BPXSY3,BPX,Systolic:  Blood pres (3rd rdg) mm Hg,8.3,83
+BPXSY4,BPX,Systolic: Blood pres (4th rdg) mm Hg,93.4,72
+CDQ001,CDQ,SP ever had pain or discomfort in chest,34.4,2
+CDQ002,CDQ,SP get it walking uphill or in a hurry,82.8,3
+CDQ003,CDQ,During an ordinary pace on level ground,94.3,2
+CDQ004,CDQ,If so does SP continue or slow down,94.9,2
+CDQ008,CDQ,Severe pain in chest more than half hour,82.7,2
+CDQ009D,CDQ,Pain in upper sternum,0.0,2
+CDQ009F,CDQ,Pain in left chest,0.0,2
+CDQ010,CDQ,Shortness of breath on stairs/inclines,34.5,2
+DBQ197,DBQ,Past 30 day milk product consumption,0.0,5
+DBQ229,DBQ,Regular milk use 5 times per week,0.1,3
+DBQ235A,DBQ,How often drank milk age 5-12,25.0,5
+DBQ235B,DBQ,How often drank milk age 13-17,24.7,5
+DBQ235C,DBQ,How often drank milk age 18-35,24.5,5
+DBQ301,DBQ,Community/Government meals delivered,66.9,2
+DBQ330,DBQ,Eat meals at Community/Senior center,66.9,2
+DBQ700,DBQ,How healthy is the diet,0.0,5
+DMDCITZN,DEMO,Citizenship Status,0.2,2
+DMDEDUC2,DEMO,Education Level - Adults 20+,0.1,5
+DMDFMSIZ,DEMO,Total number of people in the Family,0.0,7
+DMDHHSIZ,DEMO,Total number of people in the Household,0.0,7
+DMDMARTL,DEMO,Marital Status,0.1,6
+DMDYRSUS,DEMO,Length of time in US,72.6,9
+DPQ010,DPQ,Little interest in doing things,10.3,4
+DPQ020,DPQ,"Feeling down, depressed, or hopeless",10.2,4
+DPQ030,DPQ,Trouble sleeping or sleeping too much,10.2,4
+DPQ040,DPQ,Feeling tired or having little energy,10.3,4
+DPQ050,DPQ,Poor appetite or overeating,10.2,4
+DPQ060,DPQ,Feeling bad about yourself,10.3,4
+DPQ070,DPQ,Trouble concentrating on things,10.3,4
+DPQ080,DPQ,Moving or speaking slowly or too fast,10.3,4
+DPQ090,DPQ,Thought you would be better off dead,10.3,4
+DPQ100,DPQ,Difficulty these problems have caused,40.3,4
+DUQ200,DUQ,Ever used marijuana or hashish,41.5,2
+DUQ210,DUQ,Age when first tried marijuana,68.6,56
+DUQ220Q,DUQ,Last time used marijuana or hashish,69.0,66
+DUQ220U,DUQ,Last time used marijuana or hashish/unit,69.0,4
+DUQ230,DUQ,# days used marijuana or hashish/month,91.6,30
+DUQ240,DUQ,Ever used cocaine/heroin/methamphetamine,28.6,2
+DUQ250,DUQ,Ever use any form of cocaine,87.6,2
+DUQ260,DUQ,Age first used cocaine,89.7,45
+DUQ270Q,DUQ,"Last time you used cocaine, in any form",89.8,53
+DUQ270U,DUQ,Last time you used cocaine/unit,89.8,4
+DUQ272,DUQ,# of time you used cocaine,89.8,6
+DUQ290,DUQ,Ever used heroin,87.6,2
+DUQ330,DUQ,Ever used methamphetamine,87.6,2
+DUQ370,DUQ,Ever use a needle to inject illegal drug,28.4,2
+DUQ430,DUQ,Ever been in rehabilitation program,67.9,2
+HIQ011,HIQ,Covered by health insurance,0.1,2
+HIQ031A,HIQ,Covered by private insurance,0.0,2
+HIQ031B,HIQ,Covered by Medicare,0.0,2
+HIQ031D,HIQ,Covered by Medicaid,0.0,2
+HIQ031F,HIQ,Covered by military health care,0.0,2
+HIQ031H,HIQ,Covered by state-sponsored health plan,0.0,2
+HIQ031I,HIQ,Covered by other government insurance,0.0,2
+HIQ031J,HIQ,Covered by single service plan,0.0,2
+HIQ105,HIQ,Insurance card available or not,82.6,2
+HIQ210,HIQ,Time when no insurance in past year?,21.4,2
+HIQ270,HIQ,Do plans cover prescriptions?,22.3,2
+HSD010,HSQ,General health condition,9.4,5
+HSQ500,HSQ,SP have head cold or chest cold,9.6,2
+HSQ510,HSQ,SP have stomach or intestinal illness?,9.5,2
+HSQ520,HSQ,"SP have flu, pneumonia, ear infection?",9.6,2
+HSQ571,HSQ,SP donated blood in past 12 months?,9.5,2
+HSQ590,HSQ,Blood ever tested for HIV virus?,12.5,2
+HUD080,HUQ,#times overnite hospital patient/last yr,87.4,6
+HUQ010,HUQ,General health condition,0.1,5
+HUQ020,HUQ,Health now compared with 1 year ago,0.0,3
+HUQ030,HUQ,Routine place to go for healthcare,0.0,3
+HUQ071,HUQ,Overnite hospital patient in last year,0.0,2
+HUQ090,HUQ,Seen mental health professional/past yr,0.0,2
+INDFMPIR,DEMO,Family PIR,9.1,501
+KIQ005,KIQ_U,How often have urinary leakage,9.9,5
+KIQ010,KIQ_U,How much urine lose each time?,73.7,3
+KIQ022,KIQ_U,Ever told you had weak/failing kidneys,0.2,2
+KIQ042,KIQ_U,Leak urine during physical activities,9.9,2
+KIQ044,KIQ_U,Urinated before reaching the toilet,9.9,2
+KIQ046,KIQ_U,Leak urine during nonphysical activities,10.0,2
+KIQ050,KIQ_U,How much did urine leakage bother you,66.4,5
+KIQ052,KIQ_U,How much were daily activities affected,66.4,5
+KIQ430,KIQ_U,How frequently does this occur?,79.2,4
+KIQ450,KIQ_U,How frequently does this occur?,79.5,4
+KIQ470,KIQ_U,How frequently does this occur?,92.7,4
+KIQ480,KIQ_U,How many times urinate in night?,9.9,6
+LBDBANO,CBC,Basophils number (1000 cells/uL),5.2,14
+LBDEONO,CBC,Eosinophils number (1000 cells/uL),5.2,37
+LBDHDD,HDL,Direct HDL-Cholesterol (mg/dL),6.1,154
+LBDLDL,TRIGLY,LDL-cholesterol (mg/dL),55.9,250
+LBDLYMNO,CBC,Lymphocyte number (1000 cells/uL),5.2,102
+LBDMONO,CBC,Monocyte number (1000 cells/uL),5.2,34
+LBDNENO,CBC,Segmented neutrophils num (1000 cell/uL),5.2,161
+LBXBAPCT,CBC,Basophils percent (%),5.2,72
+LBXEOPCT,CBC,Eosinophils percent (%),5.2,213
+LBXHCT,CBC,Hematocrit (%),5.1,344
+LBXHGB,CBC,Hemoglobin (g/dL),5.1,136
+LBXLYPCT,CBC,Lymphocyte percent (%),5.2,613
+LBXMC,CBC,MCHC (g/dL),5.0,115
+LBXMCHSI,CBC,Mean cell hemoglobin (pg),5.1,243
+LBXMCVSI,CBC,Mean cell volume (fL),5.1,538
+LBXMOPCT,CBC,Monocyte percent (%),5.2,219
+LBXMPSI,CBC,Mean platelet volume (fL),5.1,84
+LBXNEPCT,CBC,Segmented neutrophils percent (%),5.2,683
+LBXPLTSI,CBC,Platelet count SI (1000 cells/uL),5.1,545
+LBXRBCSI,CBC,Red blood cell count (million cells/uL),5.1,412
+LBXRDW,CBC,Red cell distribution width (%),5.1,158
+LBXSAL,BIOPRO,Albumin (g/dL),6.4,37
+LBXSAPSI,BIOPRO,Alkaline phosphotase (U/L),6.4,257
+LBXSASSI,BIOPRO,Aspartate aminotransferase AST (U/L),6.7,193
+LBXSATSI,BIOPRO,Alanine aminotransferase ALT (U/L),6.6,211
+LBXSBU,BIOPRO,Blood urea nitrogen (mg/dL),6.4,80
+LBXSC3SI,BIOPRO,Bicarbonate (mmol/L),6.6,28
+LBXSCA,BIOPRO,Total calcium (mg/dL),6.5,53
+LBXSCH,BIOPRO,Cholesterol (mg/dL),6.4,330
+LBXSCLSI,BIOPRO,Chloride (mmol/L),6.4,41
+LBXSCR,BIOPRO,Creatinine (mg/dL),6.4,384
+LBXSGB,BIOPRO,Globulin (g/dL),6.6,60
+LBXSGTSI,BIOPRO,Gamma glutamyl transferase (U/L),6.4,397
+LBXSIR,BIOPRO,"Iron, refigerated (ug/dL)",6.5,285
+LBXSKSI,BIOPRO,Potassium (mmol/L),6.4,246
+LBXSLDSI,BIOPRO,Lactate dehydrogenase LDH (U/L),6.9,305
+LBXSNASI,BIOPRO,Sodium (mmol/L),6.4,42
+LBXSPH,BIOPRO,Phosphorus (mg/dL),6.4,65
+LBXSTB,BIOPRO,Total bilirubin (mg/dL),6.5,53
+LBXSTP,BIOPRO,Total protein (g/dL),6.5,59
+LBXSTR,BIOPRO,Triglycerides (mg/dL),6.5,837
+LBXSUA,BIOPRO,Uric acid (mg/dL),6.4,123
+LBXTC,TCHOL,Total Cholesterol( mg/dL),6.1,328
+LBXTR,TRIGLY,Triglyceride (mg/dL),55.1,599
+LBXWBCSI,CBC,White blood cell count (1000 cells/uL),5.1,210
+MCD093,MCQ,Year receive blood transfusion,88.2,3
+MCQ010,MCQ,Ever been told you have asthma,0.1,2
+MCQ025,MCQ,Age when first had asthma,86.0,83
+MCQ035,MCQ,Still have asthma,86.1,2
+MCQ040,MCQ,Had asthma attack in past year,91.7,2
+MCQ050,MCQ,Emergency care visit for asthma/past yr,93.4,2
+MCQ053,MCQ,Taking treatment for anemia/past 3 mos,0.1,2
+MCQ080,MCQ,Doctor ever said you were overweight,0.1,2
+MCQ092,MCQ,Ever receive blood transfusion,1.2,2
+MCQ160A,MCQ,Doctor ever said you had arthritis,0.2,2
+MCQ160B,MCQ,Ever told had congestive heart failure,0.3,2
+MCQ160C,MCQ,Ever told you had coronary heart disease,0.4,2
+MCQ160D,MCQ,Ever told you had angina/angina pectoris,0.3,2
+MCQ160E,MCQ,Ever told you had heart attack,0.1,2
+MCQ160F,MCQ,Ever told you had a stroke,0.1,2
+MCQ160G,MCQ,Ever told you had emphysema,0.1,2
+MCQ160K,MCQ,Ever told you had chronic bronchitis,0.2,2
+MCQ160L,MCQ,Ever told you had any liver condition,0.2,2
+MCQ160M,MCQ,Ever told you had a thyroid problem,0.2,2
+MCQ170K,MCQ,Do you still have chronic bronchitis,94.4,2
+MCQ170M,MCQ,Do you still have a thyroid problem,90.3,2
+MCQ220,MCQ,Ever told you had cancer or malignancy,0.1,2
+MCQ230A,MCQ,What kind of cancer,91.4,30
+MCQ300A,MCQ,Close relative had heart attack?,2.5,2
+MCQ300B,MCQ,Close relative had asthma?,2.2,2
+MCQ300C,MCQ,Close relative had diabetes?,2.0,2
+OCD150,OCQ,Type of work done last week,0.1,4
+OCD270,OCQ,Number of months working in the main job,44.5,99
+OCD390G,OCQ,Kind of work you have done the longest,0.2,4
+OCD395,OCQ,Duration of longest job (months),41.1,97
+OCQ180,OCQ,Hours worked last week at all jobs,46.5,112
+OCQ210,OCQ,Usually work 35 or more hours per week,85.2,2
+OCQ260,OCQ,Description of job/work situation,44.8,6
+OCQ380,OCQ,Main reason did not work last week,58.7,7
+PFQ049,PFQ,Limitations keeping you from working,0.0,2
+PFQ051,PFQ,Limited in amount of work you can do,0.1,2
+PFQ054,PFQ,Need special equipment to walk,0.0,2
+PFQ057,PFQ,Experience confusion/memory problems,0.1,2
+PFQ059,PFQ,"Physical, mental, emotional limitations",26.3,2
+PFQ061A,PFQ,Managing money difficulty,53.9,5
+PFQ061B,PFQ,Walking for a quarter mile difficulty,64.4,5
+PFQ061C,PFQ,Walking up ten steps difficulty,64.4,5
+PFQ061D,PFQ,"Stooping, crouching, kneeling difficulty",53.9,5
+PFQ061E,PFQ,Lifting or carrying difficulty,53.9,5
+PFQ061F,PFQ,House chore difficulty,53.9,5
+PFQ061G,PFQ,Preparing meals difficulty,53.9,5
+PFQ061H,PFQ,Walking between rooms on same floor,53.9,5
+PFQ061I,PFQ,Standingup from armless chair difficulty,53.9,5
+PFQ061J,PFQ,Getting in and out of bed difficulty,53.9,5
+PFQ061K,PFQ,"Using fork, knife, drinking from cup",53.9,5
+PFQ061L,PFQ,Dressing yourself difficulty,53.9,5
+PFQ061M,PFQ,Standing for long periods difficulty,54.0,5
+PFQ061N,PFQ,Sitting for long periods difficulty,53.9,5
+PFQ061O,PFQ,Reaching up over head difficulty,53.9,5
+PFQ061P,PFQ,Grasp/holding small objects difficulty,53.9,5
+PFQ061Q,PFQ,"Going out to movies, events difficulty",53.9,5
+PFQ061R,PFQ,Attending social event difficulty,53.9,5
+PFQ061S,PFQ,Leisure activity at home difficulty,53.9,5
+PFQ061T,PFQ,Push or pull large objects difficulty,53.9,5
+PFQ090,PFQ,Require special healthcare equipment,0.0,2
+RHD143,RHQ,Are you pregnant now?,86.0,2
+RHD280,RHQ,Had a hysterectomy?,56.4,2
+RHQ010,RHQ,Age when first menstrual period occurred,54.5,19
+RHQ031,RHQ,At least 1 period in past 12 months,54.0,2
+RHQ060,RHQ,Age at last menstrual period,77.2,53
+RHQ131,RHQ,Ever been pregnant?,54.1,2
+RHQ160,RHQ,How many times have been pregnant?,61.0,24
+RHQ166,RHQ,How many vaginal deliveries?,61.3,16
+RHQ169,RHQ,How many cesarean deliveries?,78.3,8
+RHQ171,RHQ,How many deliveries live birth result?,63.1,16
+RHQ291,RHQ,Age when had hysterectomy,90.1,63
+RHQ420,RHQ,Ever taken birth control pills?,54.1,2
+RHQ540,RHQ,Ever use female hormones?,54.2,2
+RHQ554,RHQ,Use hormone pills w/estrogen only,93.3,2
+RHQ560Q,RHQ,How long taking estrogen-only pills?,94.8,49
+RHQ560U,RHQ,"Unit of measure: months, years",94.8,2
+RHQ570,RHQ,Used estrogen/progestin combo pills,93.4,2
+RIAGENDR,DEMO,Gender,0.0,2
+RIDAGEYR,DEMO,Age at Screening Adjudicated - Recode,0.0,66
+RIDRETH1,DEMO,Race/Ethnicity - Recode,0.0,5
+SLQ050,SLQ,Ever told doctor had trouble sleeping?,0.1,2
+SMD030,SMQ,Age started smoking cigarettes regularly,55.9,63
+SMD057,SMQ,# cigarettes smoked per day when quit,77.7,52
+SMD093,SMQ,May I please see the pack of cigarettes,79.4,4
+SMD100CO,SMQ,FTC Carbon Monoxide Content,85.2,19
+SMD100FL,SMQ,Filter type,80.8,2
+SMD100LN,SMQ,Length,80.9,4
+SMD100MN,SMQ,Menthol indicator,80.8,2
+SMD100NI,SMQ,FTC Nicotine Content,85.2,18
+SMD100TR,SMQ,FTC Tar Content,85.2,24
+SMD641,SMQ,# days smoked cigs during past 30 days,79.4,31
+SMD650,SMQ,Avg # cigarettes/day during past 30 days,79.6,38
+SMQ020,SMQ,Smoked at least 100 cigarettes in life,0.1,2
+SMQ040,SMQ,Do you now smoke cigarettes,55.7,3
+SMQ050Q,SMQ,How long since quit smoking cigarettes,76.4,72
+SMQ050U,SMQ,Unit of measure (day/week/month/year),76.8,4
+URXUCR,ALB_CR,"Creatinine, urine (mg/dL)",2.5,528
+URXUMA,ALB_CR,"Albumin, urine (ug/mL)",2.5,2142
+WHD010,WHQ,Current self-reported height (inches),2.4,40
+WHD020,WHQ,Current self-reported weight (pounds),1.7,324
+WHD050,WHQ,Self-reported weight - 1 yr ago (pounds),2.1,341
+WHD080A,WHQ,Ate less to lose weight,0.0,2
+WHD080B,WHQ,Switched to foods with lower calories,0.0,2
+WHD080C,WHQ,Ate less fat to lose weight,0.0,2
+WHD080D,WHQ,Exercised to lose weight,0.0,2
+WHD080E,WHQ,Skipped meals,0.0,2
+WHD080F,WHQ,Ate diet foods or products,0.0,2
+WHD080G,WHQ,Used a liquid diet formula,0.0,2
+WHD080H,WHQ,Joined a weight loss program,0.0,2
+WHD080I,WHQ,Took prescription diet pills,0.0,2
+WHD080J,WHQ,Took non-RX suppl. to lose weight,0.0,2
+WHD080M,WHQ,Drank a lot of water,0.0,2
+WHD080N,WHQ,Followed a special diet,0.0,2
+WHD080O,WHQ,Ate fewer carbohydrates,0.0,2
+WHD080Q,WHQ,"Ate more fruits, vegetables, salads",0.0,2
+WHD080R,WHQ,Changed eating habits,0.0,2
+WHD110,WHQ,Self-reported weight-10 yrs ago (pounds),30.4,289
+WHD120,WHQ,Self-reported weight-age 25 (pounds),17.0,248
+WHD130,WHQ,Self-reported height - age 25 (inches),53.5,41
+WHD140,WHQ,Self-reported greatest weight (pounds),2.0,380
+WHQ030,WHQ,How do you consider your weight,0.3,3
+WHQ040,WHQ,"Like to weigh more, less or same",0.2,3
+WHQ060,WHQ,Weight change intentional,80.4,2
+WHQ070,WHQ,Tried to lose weight in past year,12.3,2
+WHQ150,WHQ,Age when heaviest weight,2.4,78

@@ -6,7 +6,6 @@ import time
 
 import numpy as np
 import pandas as pd
-from lightgbm import LGBMClassifier
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
@@ -16,7 +15,17 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.utils.class_weight import compute_sample_weight
-from xgboost import XGBClassifier
+
+# XGBoost and LightGBM are imported lazily so the other models still work where they
+# are not installed; using one of them without the package raises a clear error.
+try:
+    from xgboost import XGBClassifier
+except ImportError:  # pragma: no cover
+    XGBClassifier = None
+try:
+    from lightgbm import LGBMClassifier
+except ImportError:  # pragma: no cover
+    LGBMClassifier = None
 
 MODEL_NAMES = ["logreg", "random_forest", "xgboost", "lightgbm", "mlp"]
 
@@ -60,6 +69,9 @@ def make_estimator(name: str, params: dict, y_train: pd.Series, seed: int, n_job
         return RandomForestClassifier(
             **params, random_state=seed, n_jobs=n_jobs,
             class_weight="balanced_subsample" if balanced else None)
+    if name in ("xgboost", "lightgbm") and {"xgboost": XGBClassifier,
+                                            "lightgbm": LGBMClassifier}[name] is None:
+        raise ImportError(f"{name} is not installed: run `uv pip install -r requirements.txt`")
     if name == "xgboost":
         return XGBClassifier(**params, tree_method="hist", scale_pos_weight=ratio,
                              eval_metric="logloss", random_state=seed, n_jobs=n_jobs)
