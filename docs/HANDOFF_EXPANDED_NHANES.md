@@ -191,11 +191,11 @@ citations; plagiarism < 10%, **AI-generated content < 20%**.
 | Accuracy/precision/recall/F1/ROC-AUC/PR-AUC | Done (`results_wide/metrics.csv`) |
 | Test predictions (for ROC curves, confusion matrices) | Done (`results_wide/predictions/test_predictions.csv`) |
 | MLP training curves data | Done (`results_wide/mlp_history.csv`) |
-| **5-fold cross-validation** | **TODO** (old pipeline had it; new benchmark does not) |
-| **Drift characterised by clinical cause** | **TODO** (see section 7) |
-| Second and third datasets (benchmark = several datasets) | **TODO: BRFSS (section 8) and natality (section 8b)** |
+| 5-fold cross-validation | Done for all three datasets (`scripts/run_wide_cv.py`, `docs/RESULTS.md` 2.7) |
+| Drift characterised by clinical cause | Done (`scripts/analyze_drift.py`, `docs/RESULTS.md` 2.5-2.6) |
+| Second and third datasets (benchmark = several datasets) | Done: BRFSS (93 features) and natality (73), full benchmark run (`docs/RESULTS.md`, `docs/HANDOFF_BRFSS_NATALITY.md`) |
 | More deep tabular models (TabReD compares several) | Optional TODO |
-| Slides updated to the new results | TODO (for presentation 16 Nov) |
+| Slides updated to the new results | TODO (inputs ready: `docs/RESULTS.md`, `figures_wide/`) |
 | Notebook `ProjectID.ipynb` updated to the new pipeline | TODO |
 | Report rewritten with new results; [REVIEW] passages in own words | TODO |
 

@@ -1,0 +1,7 @@
+feature,statistic,cause,change_at,description,2017,2018,2019,2020,2021,2022,2023
+label,mean,population shift,2020,Diagnosed-diabetes prevalence dips in the COVID-19 year 2020,0.13658,0.13972,0.13682,0.1304,0.13206,0.13622,0.13866
+PERSDOC,share == 2,coding revision,2021,PERSDOC2 -> PERSDOC3 rewording: 'more than one personal doctor' jumps,0.0767,0.07796,0.07928,0.06698,0.2836,0.30384,0.3261
+HLTHPLN,share == 2,coding revision,2021,Yes/no coverage question replaced by 'primary source of insurance' (CDC-derived series),0.07832,0.08002,0.08492,0.08568,0.05168,0.05148,0.05348
+_HCVU65,share == 2,coding revision,2021,"CDC-derived 'no coverage, age 18-64' follows the same 2021 question change",0.07224,0.07352,0.07826,0.07852,0.04866,0.04854,0.05026
+_MRACE,share == 6,coding revision,2022,2022 race question: 'other race only' category removed,0.02132,0.02628,0.03038,0.03026,0.02894,0.0,0.02016
+MSCODE,missing,survey-mode change,steady,Landline-only metro code: missing grows as the sample shifts to cell phones,0.57362,0.62932,0.65044,0.6979,0.7387,0.78764,0.80496

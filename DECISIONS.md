@@ -98,3 +98,28 @@ Each entry: **decision** → alternatives → reason.
 32. **`--quick` never runs the report, presentation or notebook stages** (and refuses them when
     requested explicitly) → write quick versions to separate folders → these stages write fixed
     project files; a smoke test overwrote them once during development, so they are now guarded.
+
+## Three-dataset benchmark (16 Nov 2026)
+33. **BRFSS and natality are subsampled to 50,000 eligible rows per year (seed 42)** → use all rows
+    (~3M / ~33M) → TabReD also subsampled its large datasets; keeps tuning feasible. Natality is
+    streamed through `unzip -p` with reservoir sampling (zips use Deflate64; 5 GB per year unzipped).
+34. **Feature counts were not targeted** → pad BRFSS/natality to TabReD's range (odd-year questions,
+    engineered aggregates) → every leakage-free feature present in all years is kept, including the
+    agencies' derived variables (CDC calculated variables, NCHS recodes/imputation flags), as TabReD
+    keeps production feature sets; nothing is added just to raise the count.
+35. **Natality target = preterm birth (OE gestation < 37 weeks) from pre-delivery items only** →
+    birth weight / NICU / cesarean targets → preterm is the standard birth-certificate prediction task;
+    every item recorded at or after delivery (and 3rd-trimester smoking, prenatal visit count, weight
+    gain) is excluded as leakage.
+36. **Natality windows test 2020, 2022, 2024; default split 2016-21 / 2022 / 2023-24** → contiguous
+    windows → 9 years allow spaced windows; one window tests the COVID-19 year; default is ~80/20.
+37. **Same-period random-vs-time comparison added** → only TabReD's comparison → TabReD's random and
+    time test sets contain different periods; when later periods are easier (natality) the sign of the
+    difference flips, so the random split is also scored on its rows from the time test period.
+38. **CV uses the default split's development periods and the selected hyperparameters** → nested CV
+    → same rule as #17 of the original project; the test periods are never used.
+39. **Jobs are run one at a time** → in parallel → two jobs each starting one thread per core slowed
+    XGBoost/LightGBM 10-50x (thread oversubscription).
+40. **Domain classifier subsamples each side to 20,000 rows** → all rows → runtime; same logistic
+    regression + 5-fold CV as the original project.
+

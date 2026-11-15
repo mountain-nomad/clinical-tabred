@@ -3,6 +3,14 @@
 **Evaluating Tabular Machine Learning Models under Temporal Distribution Shift in Healthcare Data**
 CSCI 447 Machine Learning: Theory and Practice · Fall 2026 · Project P034
 
+> **Current version (16 Nov 2026): three-dataset clinical TabReD benchmark.** NHANES 2005-2018
+> (diabetes, 280 features), BRFSS 2017-2023 (diabetes, 93) and NCHS natality 2016-2024 (preterm
+> birth, 73); 5 models x 7 TabReD-style splits, 5-fold CV, drift with clinical causes.
+> **Results: [`docs/RESULTS.md`](docs/RESULTS.md)** · tables: `results_summary/` · figures:
+> `figures_wide/` · data building and decisions: [`docs/HANDOFF_EXPANDED_NHANES.md`](docs/HANDOFF_EXPANDED_NHANES.md),
+> [`docs/HANDOFF_BRFSS_NATALITY.md`](docs/HANDOFF_BRFSS_NATALITY.md). The sections below describe the
+> original 9-feature NHANES 2011-2016 version (report and notebook still describe that version).
+
 ## Objective
 A small, reproducible benchmark (inspired by TabReD, Rubachev et al., 2024) that compares Logistic
 Regression, Random Forest, XGBoost, LightGBM and an MLP on three NHANES survey cycles and asks:

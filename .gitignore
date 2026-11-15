@@ -23,3 +23,10 @@ data/processed/nhanes_wide_2005_2018.csv
 
 # BRFSS raw files (download with scripts/download_brfss.ps1)
 data/raw/brfss/
+
+# Natality raw files (2 GB; NCHS public-use zips, see docs/HANDOFF_BRFSS_NATALITY.md)
+data/raw/natality/
+results_*_quick/
+# Large prediction files: the gzipped copies (*.csv.gz) are committed instead
+results_brfss/predictions/test_predictions.csv
+results_natality/predictions/test_predictions.csv

@@ -1,0 +1,74 @@
+feature,type,label,missing_pct,n_unique
+MAGE_IMPFLG,categorical,Mother's age imputed,0.0,2
+MAGE_REPFLG,categorical,Reported age of mother used,0.0,2
+MAGER,numeric,Mother's single years of age,0.0,39
+MAGER14,categorical,Mother's age recode 14,0.0,13
+MAGER9,categorical,Mother's age recode 9,0.0,9
+MBSTATE_REC,categorical,Mother's nativity (US / outside US),0.2,2
+RESTATUS,categorical,Residence status,0.0,3
+MRACE31,categorical,Mother's race recode 31,0.0,31
+MRACE6,categorical,Mother's race recode 6,0.0,6
+MRACE15,categorical,Mother's race recode 15,0.0,15
+MRACEIMP,categorical,"Mother's race imputed (1 unknown, 2 other race)",0.0,2
+MHISP_R,categorical,Mother's Hispanic origin recode,0.9,6
+MRACEHISP,categorical,Mother's race/Hispanic origin,0.9,7
+DMAR,categorical,Marital status,10.4,2
+MAR_IMP,categorical,Marital status imputed,0.0,2
+MEDUC,categorical,Mother's education,1.5,8
+FAGERPT_FLG,categorical,Father's reported age used,0.0,2
+FAGECOMB,numeric,Father's combined age,11.3,69
+FAGEREC11,categorical,Father's age recode 11,11.3,10
+FRACE31,categorical,Father's race recode 31,18.4,30
+FRACE6,categorical,Father's race recode 6,18.4,6
+FRACE15,categorical,Father's race recode 15,18.4,15
+FHISP_R,categorical,Father's Hispanic origin recode,12.6,6
+FRACEHISP,categorical,Father's race/Hispanic origin,13.4,7
+FEDUC,categorical,Father's education,13.6,8
+PRIORLIVE,numeric,Prior births now living,0.2,18
+PRIORDEAD,numeric,Prior births now dead,0.3,13
+PRIORTERM,numeric,Prior other terminations,0.3,22
+LBO_REC,categorical,Live birth order recode,0.3,8
+TBO_REC,categorical,Total birth order recode,0.4,8
+ILLB_R,numeric,Interval since last live birth (months),41.4,298
+ILLB_R11,categorical,Interval since last live birth recode 11 (88 = first),3.1,10
+ILOP_R,numeric,Interval since last other pregnancy (months),81.5,296
+ILOP_R11,categorical,Interval since last other pregnancy recode 11,9.2,10
+ILP_R,numeric,Interval since last pregnancy (months),42.4,297
+ILP_R11,categorical,Interval since last pregnancy recode 11,11.4,10
+PRECARE,numeric,Month prenatal care began (0 = none),2.2,11
+PRECARE5,categorical,Month prenatal care began recode,2.2,4
+WIC,categorical,WIC food during pregnancy,1.1,2
+CIG_0,numeric,"Cigarettes per day, 3 months before pregnancy",0.4,48
+CIG_1,numeric,"Cigarettes per day, 1st trimester",0.4,44
+CIG_2,numeric,"Cigarettes per day, 2nd trimester",0.4,44
+CIG0_R,categorical,Cigarettes before pregnancy recode,0.4,6
+CIG1_R,categorical,Cigarettes 1st trimester recode,0.4,6
+CIG2_R,categorical,Cigarettes 2nd trimester recode,0.4,6
+M_Ht_In,numeric,Mother's height (inches),0.5,37
+BMI,numeric,Mother's pre-pregnancy BMI,2.2,540
+BMI_R,categorical,Pre-pregnancy BMI recode,2.2,6
+PWgt_R,numeric,Pre-pregnancy weight (pounds),2.0,301
+RF_PDIAB,categorical,Pre-pregnancy diabetes,0.1,2
+RF_GDIAB,categorical,Gestational diabetes,0.1,2
+RF_PHYPE,categorical,Pre-pregnancy hypertension,0.1,2
+RF_GHYPE,categorical,Gestational hypertension,0.1,2
+RF_EHYPE,categorical,Hypertension eclampsia,0.1,2
+RF_PPTERM,categorical,Previous preterm birth,0.1,2
+RF_INFTR,categorical,Infertility treatment used,0.1,2
+RF_FEDRG,categorical,Fertility-enhancing drugs,0.2,2
+RF_ARTEC,categorical,Assisted reproductive technology,0.2,2
+RF_CESAR,categorical,Previous cesarean,0.1,2
+RF_CESARN,numeric,Number of previous cesareans,0.1,9
+NO_RISKS,categorical,No risk factors reported,0.1,2
+IP_GON,categorical,Gonorrhea,0.3,2
+IP_SYPH,categorical,Syphilis,0.3,2
+IP_CHLAM,categorical,Chlamydia,0.3,2
+IP_HEPB,categorical,Hepatitis B,0.3,2
+IP_HEPC,categorical,Hepatitis C,0.3,2
+NO_INFEC,categorical,No infections reported,0.3,2
+PAY,categorical,Payment source for delivery (insurance),0.7,7
+PAY_REC,categorical,Payment recode,0.7,4
+DPLURAL,categorical,Plurality,0.0,5
+IMP_PLUR,categorical,Plurality imputed,0.0,2
+SEX,categorical,Sex of infant,0.0,2
+IMP_SEX,categorical,Infant sex imputed,0.0,2

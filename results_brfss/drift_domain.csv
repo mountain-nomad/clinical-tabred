@@ -1,0 +1,14 @@
+comparison,kind,split,roc_auc
+default: train vs test,time,default,0.7589566999999999
+sliding-window-0: train vs test,time,sliding-window-0,0.7902366
+random-0: train vs test,random,random-0,0.5008830875
+sliding-window-1: train vs test,time,sliding-window-1,0.7837404750000001
+random-1: train vs test,random,random-1,0.5055223
+sliding-window-2: train vs test,time,sliding-window-2,0.7656603125
+random-2: train vs test,random,random-2,0.49343638749999996
+2017 vs 2018,adjacent,,0.6952082125000001
+2018 vs 2019,adjacent,,0.6970656500000001
+2019 vs 2020,adjacent,,0.7950407125000001
+2020 vs 2021,adjacent,,0.7986456125
+2021 vs 2022,adjacent,,0.77021385
+2022 vs 2023,adjacent,,0.8200749499999999

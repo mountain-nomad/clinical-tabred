@@ -1,8 +1,10 @@
-"""TabReD-style benchmark on the wide NHANES table (2005-2018, 7 cycles, ~290 features).
+"""TabReD-style benchmark on the wide clinical tables (NHANES, BRFSS, natality).
 
-Splits (same design as TabReD's preprocessing scripts):
-  default            train 2005-2012 | val 2013-2014 | test 2015-2018
-  sliding-window-k   train 3 cycles  | val next cycle | test next cycle   (k = 0, 1, 2)
+Splits (same design as TabReD's preprocessing scripts), per dataset (see DATASETS):
+  nhanes   default train 2005-2012 | val 2013-2014 | test 2015-2018   (7 two-year cycles)
+  brfss    default train 2017-2020 | val 2021      | test 2022-2023   (7 years)
+  natality default train 2016-2021 | val 2022      | test 2023-2024   (9 years)
+  sliding-window-k   train 3 periods | val next period | test next period   (3 windows)
   random-k           the rows of sliding-window-k, shuffled and re-split into the SAME sizes
 
 Every model is tuned on the validation split (PR-AUC, ROC-AUC tiebreak), the threshold is
@@ -10,10 +12,12 @@ chosen on validation (max F1), and the test split is scored once. Preprocessing 
 scaling, one-hot) is fitted on the training split only.
 
 Usage (from the repository root, inside the .venv):
-  python scripts/run_wide_benchmark.py                       # all five models, all splits
+  python scripts/run_wide_benchmark.py                       # NHANES, all five models, all splits
+  python scripts/run_wide_benchmark.py --dataset brfss       # BRFSS 2017-2023 (results_brfss/)
+  python scripts/run_wide_benchmark.py --dataset natality    # natality 2016-2024 (results_natality/)
   python scripts/run_wide_benchmark.py --models logreg mlp   # a subset
   python scripts/run_wide_benchmark.py --quick               # smoke test (small sample)
-Outputs go to results_wide/ (or results_wide_quick/ with --quick).
+Outputs go to results_wide/ for NHANES, results_<dataset>/ otherwise (suffix _quick with --quick).
 """
 import argparse
 import json
@@ -35,6 +39,19 @@ from clinical_tabred.experiment import evaluate_model, tune_model  # noqa: E402
 from clinical_tabred.models import MODEL_NAMES  # noqa: E402
 
 CYCLES = ["2005-2006", "2007-2008", "2009-2010", "2011-2012", "2013-2014", "2015-2016", "2017-2018"]
+# periods: chronological period labels (column "cycle" after loading); default: (n_train, n_val) periods,
+# the remaining periods are the test set; windows: start index of each 3+1+1 sliding window.
+DATASETS = {
+    "nhanes": {"table": "nhanes_wide_2005_2018.csv", "columns": "nhanes_wide_columns.csv",
+               "periods": CYCLES, "default": (4, 1), "windows": [0, 1, 2], "out": "results_wide"},
+    "brfss": {"table": "brfss_wide_2017_2023.csv.gz", "columns": "brfss_wide_columns.csv",
+              "periods": [str(y) for y in range(2017, 2024)], "default": (4, 1), "windows": [0, 1, 2],
+              "out": "results_brfss"},
+    # 9 years: default is ~78/22 (course: 80/20); windows test 2020 (COVID), 2022 and 2024.
+    "natality": {"table": "natality_wide_2016_2024.csv.gz", "columns": "natality_wide_columns.csv",
+                 "periods": [str(y) for y in range(2016, 2025)], "default": (6, 1), "windows": [0, 2, 4],
+                 "out": "results_natality"},
+}
 # Laboratory and examination values are quantities.
 NUMERIC_COMPONENTS = {"BIOPRO", "CBC", "BMX", "TCHOL", "HDL", "TRIGLY", "ALB_CR", "BPX"}
 CATEGORICAL_EXCEPTIONS = {"BPXPTY", "BPXPULS"}                    # pulse type / regularity codes
@@ -60,12 +77,30 @@ def feature_types(columns: pd.DataFrame) -> tuple[list[str], list[str]]:
     return numeric, categorical
 
 
-def make_splits(data: pd.DataFrame, seed: int) -> dict[str, dict[str, pd.DataFrame]]:
-    by = {c: data[data["cycle"] == c] for c in CYCLES}
+def load_dataset(name: str) -> tuple[pd.DataFrame, list[str], list[str]]:
+    """Read a wide table; return (data with SEQN/cycle/label columns, numeric, categorical)."""
+    spec = DATASETS[name]
+    data = pd.read_csv(ROOT / "data" / "processed" / spec["table"], dtype={"period": str})
+    columns = pd.read_csv(ROOT / "data" / "processed" / spec["columns"])
+    columns = columns[columns["feature"].isin(data.columns)]
+    if name != "nhanes":   # shared pipeline code identifies rows by SEQN and periods by cycle
+        data = data.rename(columns={"row_id": "SEQN"}).assign(cycle=data["period"].astype(str))
+    if "type" in columns:  # BRFSS / natality: feature types decided in the build scripts
+        numeric = columns.loc[columns["type"] == "numeric", "feature"].tolist()
+        categorical = columns.loc[columns["type"] == "categorical", "feature"].tolist()
+    else:
+        numeric, categorical = feature_types(columns)
+    return data, numeric, categorical
+
+
+def make_splits(data: pd.DataFrame, seed: int, spec: dict = DATASETS["nhanes"]) -> dict[str, dict[str, pd.DataFrame]]:
+    periods, (n_tr, n_va) = spec["periods"], spec["default"]
+    by = {c: data[data["cycle"] == c] for c in periods}
     cat = lambda cs: pd.concat([by[c] for c in cs], ignore_index=True)  # noqa: E731
-    splits = {"default": {"train": cat(CYCLES[0:4]), "val": cat(CYCLES[4:5]), "test": cat(CYCLES[5:7])}}
-    for k in range(3):
-        window = {"train": cat(CYCLES[k:k + 3]), "val": cat([CYCLES[k + 3]]), "test": cat([CYCLES[k + 4]])}
+    splits = {"default": {"train": cat(periods[:n_tr]), "val": cat(periods[n_tr:n_tr + n_va]),
+                          "test": cat(periods[n_tr + n_va:])}}
+    for k, s in enumerate(spec["windows"]):
+        window = {"train": cat(periods[s:s + 3]), "val": cat([periods[s + 3]]), "test": cat([periods[s + 4]])}
         splits[f"sliding-window-{k}"] = window
         # TabReD: random splits shuffle all rows of the window and re-split into the same sizes.
         pooled = pd.concat(window.values(), ignore_index=True)
@@ -92,34 +127,33 @@ def describe(splits) -> pd.DataFrame:
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--dataset", default="nhanes", choices=list(DATASETS))
     ap.add_argument("--models", nargs="+", default=MODEL_NAMES, choices=MODEL_NAMES)
     ap.add_argument("--splits", nargs="+", default=None, help="subset of split names")
-    ap.add_argument("--quick", action="store_true", help="smoke test on 600 rows per cycle")
+    ap.add_argument("--quick", action="store_true", help="smoke test on 600 rows per period")
     ap.add_argument("--n-jobs", type=int, default=-1)
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S")
 
     config = yaml.safe_load((ROOT / "configs" / "experiment.yaml").read_text())
     seed = config["seed"]
-    out_dir = ROOT / ("results_wide_quick" if args.quick else "results_wide")
+    spec = DATASETS[args.dataset]
+    out_dir = ROOT / (spec["out"] + ("_quick" if args.quick else ""))
     (out_dir / "predictions").mkdir(parents=True, exist_ok=True)
 
-    data = pd.read_csv(ROOT / "data" / "processed" / "nhanes_wide_2005_2018.csv")
-    columns = pd.read_csv(ROOT / "data" / "processed" / "nhanes_wide_columns.csv")
-    columns = columns[columns["feature"].isin(data.columns)]
+    data, numeric, categorical = load_dataset(args.dataset)
     if args.quick:
         data = data.groupby("cycle").sample(n=600, random_state=seed).reset_index(drop=True)
-    numeric, categorical = feature_types(columns)
     settings = {"numeric": numeric, "categorical": categorical, "seed": seed, "n_jobs": args.n_jobs,
                 "balanced": True, "max_epochs": 15 if args.quick else config["mlp_training"]["max_epochs"],
                 "patience": config["mlp_training"]["patience"]}
-    logger.info("Rows %d | numeric %d | categorical %d | models %s", len(data), len(numeric),
+    logger.info("%s: rows %d | numeric %d | categorical %d | models %s", args.dataset, len(data), len(numeric),
                 len(categorical), args.models)
     pd.DataFrame({"feature": numeric + categorical,
                   "type": ["numeric"] * len(numeric) + ["categorical"] * len(categorical)}
                  ).to_csv(out_dir / "feature_types.csv", index=False)
 
-    splits = make_splits(data, seed)
+    splits = make_splits(data, seed, spec)
     if args.splits:
         splits = {k: v for k, v in splits.items() if k in args.splits}
     describe(splits).to_csv(out_dir / "splits.csv", index=False)
@@ -150,11 +184,12 @@ def main():
         if history:
             pd.concat(history, ignore_index=True).to_csv(out_dir / "mlp_history.csv", index=False)
 
-    summarize(pd.DataFrame(metrics), pd.concat(preds, ignore_index=True), config, out_dir, args.models)
+    summarize(pd.DataFrame(metrics), pd.concat(preds, ignore_index=True), config, out_dir, args.models,
+              n_windows=len(spec["windows"]))
     logger.info("Done in %.1f min. Results in %s", (time.perf_counter() - started) / 60, out_dir)
 
 
-def summarize(metrics: pd.DataFrame, preds: pd.DataFrame, config: dict, out_dir: Path, models):
+def summarize(metrics: pd.DataFrame, preds: pd.DataFrame, config: dict, out_dir: Path, models, n_windows=3):
     """Tables that answer the TabReD questions."""
     boot = config["bootstrap"]
     n_res, conf, seed = boot["n_resamples"], boot["confidence"], config["seed"]
@@ -166,7 +201,7 @@ def summarize(metrics: pd.DataFrame, preds: pd.DataFrame, config: dict, out_dir:
 
     # 2) Time-based vs random split, per window and averaged (TabReD Table 4 idea).
     rows = []
-    for k in range(3):
+    for k in range(n_windows):
         tw, rw = f"sliding-window-{k}", f"random-{k}"
         if tw not in set(preds["protocol"]) or rw not in set(preds["protocol"]):
             continue

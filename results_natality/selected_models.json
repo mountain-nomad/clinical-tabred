@@ -1,0 +1,335 @@
+{
+  "default": {
+    "logreg": {
+      "params": {
+        "C": 1.0
+      },
+      "threshold": 0.7251324171959582,
+      "best_epoch": null
+    },
+    "random_forest": {
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 10
+      },
+      "threshold": 0.572363896754266,
+      "best_epoch": null
+    },
+    "xgboost": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.03,
+        "max_depth": 5,
+        "subsample": 0.8
+      },
+      "threshold": 0.6515516638755798,
+      "best_epoch": null
+    },
+    "lightgbm": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "num_leaves": 7
+      },
+      "threshold": 0.6898561196025644,
+      "best_epoch": null
+    },
+    "mlp": {
+      "params": {
+        "hidden_layer_sizes": [
+          64
+        ],
+        "alpha": 0.0001
+      },
+      "threshold": 0.736330607867141,
+      "best_epoch": 4
+    }
+  },
+  "sliding-window-0": {
+    "logreg": {
+      "params": {
+        "C": 10.0
+      },
+      "threshold": 0.6833028374998754,
+      "best_epoch": null
+    },
+    "random_forest": {
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 10
+      },
+      "threshold": 0.541966448365701,
+      "best_epoch": null
+    },
+    "xgboost": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "max_depth": 3,
+        "subsample": 0.8
+      },
+      "threshold": 0.656985878944397,
+      "best_epoch": null
+    },
+    "lightgbm": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "num_leaves": 7
+      },
+      "threshold": 0.6935285973850589,
+      "best_epoch": null
+    },
+    "mlp": {
+      "params": {
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "alpha": 0.0001
+      },
+      "threshold": 0.7142630369144515,
+      "best_epoch": 3
+    }
+  },
+  "random-0": {
+    "logreg": {
+      "params": {
+        "C": 10.0
+      },
+      "threshold": 0.6771883184862426,
+      "best_epoch": null
+    },
+    "random_forest": {
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 10
+      },
+      "threshold": 0.5559281818511065,
+      "best_epoch": null
+    },
+    "xgboost": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "max_depth": 3,
+        "subsample": 0.8
+      },
+      "threshold": 0.640264630317688,
+      "best_epoch": null
+    },
+    "lightgbm": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "num_leaves": 7
+      },
+      "threshold": 0.6676068304364099,
+      "best_epoch": null
+    },
+    "mlp": {
+      "params": {
+        "hidden_layer_sizes": [
+          64
+        ],
+        "alpha": 0.0001
+      },
+      "threshold": 0.6704037464656766,
+      "best_epoch": 3
+    }
+  },
+  "sliding-window-1": {
+    "logreg": {
+      "params": {
+        "C": 1.0
+      },
+      "threshold": 0.665263825110722,
+      "best_epoch": null
+    },
+    "random_forest": {
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 10
+      },
+      "threshold": 0.506515924307379,
+      "best_epoch": null
+    },
+    "xgboost": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.03,
+        "max_depth": 5,
+        "subsample": 0.8
+      },
+      "threshold": 0.6471279263496399,
+      "best_epoch": null
+    },
+    "lightgbm": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.03,
+        "num_leaves": 31
+      },
+      "threshold": 0.6647883421208126,
+      "best_epoch": null
+    },
+    "mlp": {
+      "params": {
+        "hidden_layer_sizes": [
+          64
+        ],
+        "alpha": 0.0001
+      },
+      "threshold": 0.6639884178897328,
+      "best_epoch": 3
+    }
+  },
+  "random-1": {
+    "logreg": {
+      "params": {
+        "C": 1.0
+      },
+      "threshold": 0.6336110176972177,
+      "best_epoch": null
+    },
+    "random_forest": {
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 10
+      },
+      "threshold": 0.5378974975381674,
+      "best_epoch": null
+    },
+    "xgboost": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.03,
+        "max_depth": 5,
+        "subsample": 0.8
+      },
+      "threshold": 0.6533164381980896,
+      "best_epoch": null
+    },
+    "lightgbm": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "num_leaves": 7
+      },
+      "threshold": 0.6416601318761445,
+      "best_epoch": null
+    },
+    "mlp": {
+      "params": {
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "alpha": 0.0001
+      },
+      "threshold": 0.6830889033707389,
+      "best_epoch": 3
+    }
+  },
+  "sliding-window-2": {
+    "logreg": {
+      "params": {
+        "C": 1.0
+      },
+      "threshold": 0.6631580287745327,
+      "best_epoch": null
+    },
+    "random_forest": {
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 10
+      },
+      "threshold": 0.5517106390482012,
+      "best_epoch": null
+    },
+    "xgboost": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "max_depth": 3,
+        "subsample": 0.8
+      },
+      "threshold": 0.6718567609786987,
+      "best_epoch": null
+    },
+    "lightgbm": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "num_leaves": 7
+      },
+      "threshold": 0.6725411507258396,
+      "best_epoch": null
+    },
+    "mlp": {
+      "params": {
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "alpha": 0.01
+      },
+      "threshold": 0.6916452885703673,
+      "best_epoch": 3
+    }
+  },
+  "random-2": {
+    "logreg": {
+      "params": {
+        "C": 1.0
+      },
+      "threshold": 0.7175572625310956,
+      "best_epoch": null
+    },
+    "random_forest": {
+      "params": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 10
+      },
+      "threshold": 0.5269646541785307,
+      "best_epoch": null
+    },
+    "xgboost": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "max_depth": 3,
+        "subsample": 0.8
+      },
+      "threshold": 0.6609512567520142,
+      "best_epoch": null
+    },
+    "lightgbm": {
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.1,
+        "num_leaves": 7
+      },
+      "threshold": 0.6510620600016538,
+      "best_epoch": null
+    },
+    "mlp": {
+      "params": {
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "alpha": 0.0001
+      },
+      "threshold": 0.6587541141043887,
+      "best_epoch": 3
+    }
+  }
+}

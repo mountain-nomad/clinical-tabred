@@ -1,0 +1,42 @@
+comparison,kind,split,roc_auc,dataset
+default: train vs test,time,default,0.9418448384990527,nhanes
+sliding-window-0: train vs test,time,sliding-window-0,0.8640231803472164,nhanes
+random-0: train vs test,random,random-0,0.5078257422497567,nhanes
+sliding-window-1: train vs test,time,sliding-window-1,0.920843771281351,nhanes
+random-1: train vs test,random,random-1,0.5050060719270469,nhanes
+sliding-window-2: train vs test,time,sliding-window-2,0.9742828230672449,nhanes
+random-2: train vs test,random,random-2,0.5014830530977935,nhanes
+2005-2006 vs 2007-2008,adjacent,,0.8337526010682481,nhanes
+2007-2008 vs 2009-2010,adjacent,,0.7909043203972677,nhanes
+2009-2010 vs 2011-2012,adjacent,,0.7619684650538474,nhanes
+2011-2012 vs 2013-2014,adjacent,,0.8096752921494698,nhanes
+2013-2014 vs 2015-2016,adjacent,,0.844594247310417,nhanes
+2015-2016 vs 2017-2018,adjacent,,0.9623026033688294,nhanes
+default: train vs test,time,default,0.7589566999999999,brfss
+sliding-window-0: train vs test,time,sliding-window-0,0.7902366,brfss
+random-0: train vs test,random,random-0,0.5008830875,brfss
+sliding-window-1: train vs test,time,sliding-window-1,0.7837404750000001,brfss
+random-1: train vs test,random,random-1,0.5055223,brfss
+sliding-window-2: train vs test,time,sliding-window-2,0.7656603125,brfss
+random-2: train vs test,random,random-2,0.49343638749999996,brfss
+2017 vs 2018,adjacent,,0.6952082125000001,brfss
+2018 vs 2019,adjacent,,0.6970656500000001,brfss
+2019 vs 2020,adjacent,,0.7950407125000001,brfss
+2020 vs 2021,adjacent,,0.7986456125,brfss
+2021 vs 2022,adjacent,,0.77021385,brfss
+2022 vs 2023,adjacent,,0.8200749499999999,brfss
+default: train vs test,time,default,0.59263755,natality
+sliding-window-0: train vs test,time,sliding-window-0,0.5698061125,natality
+random-0: train vs test,random,random-0,0.4986614375,natality
+sliding-window-1: train vs test,time,sliding-window-1,0.5639746375000001,natality
+random-1: train vs test,random,random-1,0.4971971624999999,natality
+sliding-window-2: train vs test,time,sliding-window-2,0.55207715,natality
+random-2: train vs test,random,random-2,0.501693675,natality
+2016 vs 2017,adjacent,,0.5249166,natality
+2017 vs 2018,adjacent,,0.5183036624999999,natality
+2018 vs 2019,adjacent,,0.5242248125,natality
+2019 vs 2020,adjacent,,0.5162439,natality
+2020 vs 2021,adjacent,,0.5120138125,natality
+2021 vs 2022,adjacent,,0.50960155,natality
+2022 vs 2023,adjacent,,0.5114130250000001,natality
+2023 vs 2024,adjacent,,0.5152327875,natality
