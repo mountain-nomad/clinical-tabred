@@ -1,0 +1,13 @@
+- **d01_methodology**: Methodology of the clinical TabReD benchmark (scripts/make_diagrams.py).
+- **d02_architecture**: Model pipeline shared by all datasets and splits: preprocessing fitted on training data, five models, selection and threshold on validation, single test evaluation.
+- **d03_splits**: Time-based splits per dataset (default split and three sliding windows); each random-k split re-splits the rows of sliding-window-k at random into the same sizes.
+- **fig01_prevalence**: Positive-class rate per period (label shift). NHANES cycles are labelled by start year.
+- **fig02_default_auc_ci**: Default time split: test ROC-AUC per model with 95% bootstrap confidence intervals.
+- **fig03_random_minus_time**: Random-split minus time-split test ROC-AUC per sliding window and model (95% bootstrap CI). Positive values: a random split overestimates performance on future data.
+- **fig04_roc_curves**: ROC curves on the default split's test periods.
+- **fig05_confusion_matrices**: Confusion matrices of the validation-selected model on the default split's test periods (threshold = max F1 on validation; row percentages).
+- **fig06_mlp_training_curves**: MLP training curves on the default split (selected configuration); dashed line = early-stopping epoch.
+- **fig07_domain_shift**: Covariate shift: ROC-AUC of a classifier telling two periods apart (0.5 = indistinguishable). Points: each period vs the previous one (x = later period).
+- **fig08_drift_events**: Drift with a documented clinical cause, measured per period (dashed line = period of the change).
+- **fig09_cross_validation**: 5-fold stratified cross-validation ROC-AUC on the development periods of the default split.
+- **fig10_random_minus_time_same_period**: Random minus time ROC-AUC when both are scored on the SAME period (the time split's test period; random split restricted to its rows from that period), 95% bootstrap CI. Removes the effect of periods that are intrinsically easier or harder.

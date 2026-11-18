@@ -1,432 +1,272 @@
-[
-  {
-    "id": "best_model",
-    "label": "Model selected on 2013-2014 validation PR-AUC",
-    "source": "results/selected_models.json",
-    "column": "best_model",
-    "value": "xgboost"
+{
+  "nhanes_rows": {
+    "value": 37287.0,
+    "display": "37,287",
+    "source": "results_summary/datasets.csv",
+    "filter": "dataset == NHANES 2005-2018"
   },
-  {
-    "id": "seed",
-    "label": "Main random seed",
-    "source": "results/selected_models.json",
-    "column": "seed",
-    "value": 42
+  "nhanes_features": {
+    "value": 280.0,
+    "display": "280",
+    "source": "results_summary/datasets.csv",
+    "filter": "dataset == NHANES 2005-2018"
   },
-  {
-    "id": "n_2011",
-    "label": "Eligible adults 2011-2012",
-    "source": "results/cycle_summary.csv",
-    "column": "n",
-    "filter": {
-      "cycle": "2011-2012"
-    },
-    "value": 5202
+  "brfss_rows": {
+    "value": 350000.0,
+    "display": "350,000",
+    "source": "results_summary/datasets.csv",
+    "filter": "dataset == BRFSS 2017-2023"
   },
-  {
-    "id": "prevalence_2011",
-    "label": "Unweighted prevalence 2011-2012",
-    "source": "results/cycle_summary.csv",
-    "column": "prevalence",
-    "filter": {
-      "cycle": "2011-2012"
-    },
-    "value": 0.12995001922337562
+  "brfss_features": {
+    "value": 93.0,
+    "display": "93",
+    "source": "results_summary/datasets.csv",
+    "filter": "dataset == BRFSS 2017-2023"
   },
-  {
-    "id": "weighted_prevalence_2011",
-    "label": "Weighted prevalence 2011-2012",
-    "source": "results/cycle_summary.csv",
-    "column": "weighted_prevalence",
-    "filter": {
-      "cycle": "2011-2012"
-    },
-    "value": 0.09386125364650237
+  "natality_rows": {
+    "value": 450000.0,
+    "display": "450,000",
+    "source": "results_summary/datasets.csv",
+    "filter": "dataset == Natality 2016-2024"
   },
-  {
-    "id": "n_2013",
-    "label": "Eligible adults 2013-2014",
-    "source": "results/cycle_summary.csv",
-    "column": "n",
-    "filter": {
-      "cycle": "2013-2014"
-    },
-    "value": 5416
+  "natality_features": {
+    "value": 73.0,
+    "display": "73",
+    "source": "results_summary/datasets.csv",
+    "filter": "dataset == Natality 2016-2024"
   },
-  {
-    "id": "prevalence_2013",
-    "label": "Unweighted prevalence 2013-2014",
-    "source": "results/cycle_summary.csv",
-    "column": "prevalence",
-    "filter": {
-      "cycle": "2013-2014"
-    },
-    "value": 0.13053914327917282
+  "nhanes_best_default_roc_auc": {
+    "value": 0.9004,
+    "display": "0.900",
+    "source": "results_nhanes/default_test_ci.csv",
+    "filter": "model == xgboost (highest test ROC-AUC)"
   },
-  {
-    "id": "weighted_prevalence_2013",
-    "label": "Weighted prevalence 2013-2014",
-    "source": "results/cycle_summary.csv",
-    "column": "weighted_prevalence",
-    "filter": {
-      "cycle": "2013-2014"
-    },
-    "value": 0.10431168577913168
+  "nhanes_default_roc_auc_spread": {
+    "value": 0.0246,
+    "display": "0.025",
+    "source": "results_nhanes/default_test_ci.csv",
+    "filter": "max - min over models"
   },
-  {
-    "id": "n_2015",
-    "label": "Eligible adults 2015-2016",
-    "source": "results/cycle_summary.csv",
-    "column": "n",
-    "filter": {
-      "cycle": "2015-2016"
-    },
-    "value": 5346
+  "brfss_best_default_roc_auc": {
+    "value": 0.8258,
+    "display": "0.826",
+    "source": "results_brfss/default_test_ci.csv",
+    "filter": "model == lightgbm (highest test ROC-AUC)"
   },
-  {
-    "id": "prevalence_2015",
-    "label": "Unweighted prevalence 2015-2016",
-    "source": "results/cycle_summary.csv",
-    "column": "prevalence",
-    "filter": {
-      "cycle": "2015-2016"
-    },
-    "value": 0.15114104002992892
+  "brfss_default_roc_auc_spread": {
+    "value": 0.0043,
+    "display": "0.004",
+    "source": "results_brfss/default_test_ci.csv",
+    "filter": "max - min over models"
   },
-  {
-    "id": "weighted_prevalence_2015",
-    "label": "Weighted prevalence 2015-2016",
-    "source": "results/cycle_summary.csv",
-    "column": "weighted_prevalence",
-    "filter": {
-      "cycle": "2015-2016"
-    },
-    "value": 0.11321941463980593
+  "natality_best_default_roc_auc": {
+    "value": 0.7504,
+    "display": "0.750",
+    "source": "results_natality/default_test_ci.csv",
+    "filter": "model == xgboost (highest test ROC-AUC)"
   },
-  {
-    "id": "n_total",
-    "label": "Eligible adults, all cycles",
-    "source": "results/cycle_summary.csv",
-    "column": "n",
-    "agg": "sum",
-    "value": 15964.0
+  "natality_default_roc_auc_spread": {
+    "value": 0.0062,
+    "display": "0.006",
+    "source": "results_natality/default_test_ci.csv",
+    "filter": "max - min over models"
   },
-  {
-    "id": "best_temporal_roc_auc",
-    "label": "Best model, 2015-2016 roc_auc",
-    "source": "results/metrics_ci.csv",
-    "column": "roc_auc",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost"
-    },
-    "value": 0.7912198530342236
+  "nhanes_random_minus_time_min": {
+    "value": 0.0004,
+    "display": "+0.000",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == nhanes, min over models"
   },
-  {
-    "id": "best_temporal_roc_auc_low",
-    "label": "Best model, 2015-2016 roc_auc_low",
-    "source": "results/metrics_ci.csv",
-    "column": "roc_auc_low",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost"
-    },
-    "value": 0.7753031527567413
+  "nhanes_random_minus_time_max": {
+    "value": 0.0097,
+    "display": "+0.010",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == nhanes, max over models"
   },
-  {
-    "id": "best_temporal_roc_auc_high",
-    "label": "Best model, 2015-2016 roc_auc_high",
-    "source": "results/metrics_ci.csv",
-    "column": "roc_auc_high",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost"
-    },
-    "value": 0.8073537264316877
+  "nhanes_significant_model_windows": {
+    "value": 4.0,
+    "display": "4",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == nhanes, sum of windows_significant (of 15)"
   },
-  {
-    "id": "best_temporal_pr_auc",
-    "label": "Best model, 2015-2016 pr_auc",
-    "source": "results/metrics_ci.csv",
-    "column": "pr_auc",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost"
-    },
-    "value": 0.3681384986471673
+  "nhanes_mlp_rank_time": {
+    "value": 4.0,
+    "display": "4",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "model == mlp"
   },
-  {
-    "id": "best_temporal_pr_auc_low",
-    "label": "Best model, 2015-2016 pr_auc_low",
-    "source": "results/metrics_ci.csv",
-    "column": "pr_auc_low",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost"
-    },
-    "value": 0.33929636609083497
+  "nhanes_mlp_rank_random": {
+    "value": 2.0,
+    "display": "2",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "model == mlp"
   },
-  {
-    "id": "best_temporal_pr_auc_high",
-    "label": "Best model, 2015-2016 pr_auc_high",
-    "source": "results/metrics_ci.csv",
-    "column": "pr_auc_high",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost"
-    },
-    "value": 0.40246558966396073
+  "brfss_random_minus_time_min": {
+    "value": 0.0064,
+    "display": "+0.006",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == brfss, min over models"
   },
-  {
-    "id": "best_temporal_f1",
-    "label": "Best model, 2015-2016 f1 (validation-tuned threshold)",
-    "source": "results/metrics.csv",
-    "column": "f1",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost",
-      "threshold_rule": "val_f1",
-      "seed": 42
-    },
-    "value": 0.44425817267393125
+  "brfss_random_minus_time_max": {
+    "value": 0.0074,
+    "display": "+0.007",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == brfss, max over models"
   },
-  {
-    "id": "best_temporal_recall",
-    "label": "Best model, 2015-2016 recall (validation-tuned threshold)",
-    "source": "results/metrics.csv",
-    "column": "recall",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost",
-      "threshold_rule": "val_f1",
-      "seed": 42
-    },
-    "value": 0.655940594059406
+  "brfss_significant_model_windows": {
+    "value": 9.0,
+    "display": "9",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == brfss, sum of windows_significant (of 15)"
   },
-  {
-    "id": "best_temporal_precision",
-    "label": "Best model, 2015-2016 precision (validation-tuned threshold)",
-    "source": "results/metrics.csv",
-    "column": "precision",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost",
-      "threshold_rule": "val_f1",
-      "seed": 42
-    },
-    "value": 0.3358681875792142
+  "brfss_mlp_rank_time": {
+    "value": 3.0,
+    "display": "3",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "model == mlp"
   },
-  {
-    "id": "best_temporal_accuracy",
-    "label": "Best model, 2015-2016 accuracy (validation-tuned threshold)",
-    "source": "results/metrics.csv",
-    "column": "accuracy",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost",
-      "threshold_rule": "val_f1",
-      "seed": 42
-    },
-    "value": 0.7519640852974186
+  "brfss_mlp_rank_random": {
+    "value": 3.0,
+    "display": "3",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "model == mlp"
   },
-  {
-    "id": "best_temporal_threshold",
-    "label": "Best model, 2015-2016 threshold (validation-tuned threshold)",
-    "source": "results/metrics.csv",
-    "column": "threshold",
-    "filter": {
-      "protocol": "temporal",
-      "split": "test",
-      "model": "xgboost",
-      "threshold_rule": "val_f1",
-      "seed": 42
-    },
-    "value": 0.5998358130455017
+  "natality_random_minus_time_min": {
+    "value": -0.006,
+    "display": "-0.006",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == natality, min over models"
   },
-  {
-    "id": "a2_gap_roc_auc_diff",
-    "label": "a2_gap ROC-AUC diff",
-    "source": "results/period_gaps.csv",
-    "column": "diff",
-    "filter": {
-      "comparison": "A2: in-period holdout minus 2015-2016",
-      "model": "xgboost",
-      "metric": "roc_auc"
-    },
-    "value": 0.036237782289983755
+  "natality_random_minus_time_max": {
+    "value": -0.0033,
+    "display": "-0.003",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == natality, max over models"
   },
-  {
-    "id": "a2_gap_roc_auc_diff_low",
-    "label": "a2_gap ROC-AUC diff_low",
-    "source": "results/period_gaps.csv",
-    "column": "diff_low",
-    "filter": {
-      "comparison": "A2: in-period holdout minus 2015-2016",
-      "model": "xgboost",
-      "metric": "roc_auc"
-    },
-    "value": -0.0005713611893360959
+  "natality_significant_model_windows": {
+    "value": 3.0,
+    "display": "3",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "dataset == natality, sum of windows_significant (of 15)"
   },
-  {
-    "id": "a2_gap_roc_auc_diff_high",
-    "label": "a2_gap ROC-AUC diff_high",
-    "source": "results/period_gaps.csv",
-    "column": "diff_high",
-    "filter": {
-      "comparison": "A2: in-period holdout minus 2015-2016",
-      "model": "xgboost",
-      "metric": "roc_auc"
-    },
-    "value": 0.06980731922767167
+  "natality_mlp_rank_time": {
+    "value": 3.0,
+    "display": "3",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "model == mlp"
   },
-  {
-    "id": "random_minus_temporal_roc_auc_diff",
-    "label": "random_minus_temporal ROC-AUC diff",
-    "source": "results/period_gaps.csv",
-    "column": "diff",
-    "filter": {
-      "comparison": "B random test minus A temporal test",
-      "model": "xgboost",
-      "metric": "roc_auc"
-    },
-    "value": -0.003591527002981043
+  "natality_mlp_rank_random": {
+    "value": 5.0,
+    "display": "5",
+    "source": "results_summary/random_vs_time.csv",
+    "filter": "model == mlp"
   },
-  {
-    "id": "random_minus_temporal_roc_auc_diff_low",
-    "label": "random_minus_temporal ROC-AUC diff_low",
-    "source": "results/period_gaps.csv",
-    "column": "diff_low",
-    "filter": {
-      "comparison": "B random test minus A temporal test",
-      "model": "xgboost",
-      "metric": "roc_auc"
-    },
-    "value": -0.03266860315223766
+  "nhanes_xgboost_over_mlp_pct_time": {
+    "value": 0.9717,
+    "display": "+0.97",
+    "source": "results_summary/improvement_over_mlp.csv",
+    "filter": "dataset == nhanes, splits == time"
   },
-  {
-    "id": "random_minus_temporal_roc_auc_diff_high",
-    "label": "random_minus_temporal ROC-AUC diff_high",
-    "source": "results/period_gaps.csv",
-    "column": "diff_high",
-    "filter": {
-      "comparison": "B random test minus A temporal test",
-      "model": "xgboost",
-      "metric": "roc_auc"
-    },
-    "value": 0.023101965755184847
+  "nhanes_xgboost_over_mlp_pct_random": {
+    "value": 0.2787,
+    "display": "+0.28",
+    "source": "results_summary/improvement_over_mlp.csv",
+    "filter": "dataset == nhanes, splits == random"
   },
-  {
-    "id": "random_roc_auc_mean",
-    "label": "Best model ROC-AUC, random split (mean of seeds)",
-    "source": "results/random_seeds_summary.csv",
-    "column": "roc_auc_mean",
-    "filter": {
-      "model": "xgboost"
-    },
-    "value": 0.8044483415083402
+  "brfss_xgboost_over_mlp_pct_time": {
+    "value": 0.2372,
+    "display": "+0.24",
+    "source": "results_summary/improvement_over_mlp.csv",
+    "filter": "dataset == brfss, splits == time"
   },
-  {
-    "id": "random_n_seeds",
-    "label": "Number of random-split seeds",
-    "source": "results/random_seeds_summary.csv",
-    "column": "n_seeds",
-    "filter": {
-      "model": "xgboost"
-    },
-    "value": 5
+  "brfss_xgboost_over_mlp_pct_random": {
+    "value": 0.1945,
+    "display": "+0.19",
+    "source": "results_summary/improvement_over_mlp.csv",
+    "filter": "dataset == brfss, splits == random"
   },
-  {
-    "id": "random_roc_auc_std",
-    "label": "Best model ROC-AUC, random split (std of seeds)",
-    "source": "results/random_seeds_summary.csv",
-    "column": "roc_auc_std",
-    "filter": {
-      "model": "xgboost"
-    },
-    "value": 0.01485752710591444
+  "natality_xgboost_over_mlp_pct_time": {
+    "value": 0.8392,
+    "display": "+0.84",
+    "source": "results_summary/improvement_over_mlp.csv",
+    "filter": "dataset == natality, splits == time"
   },
-  {
-    "id": "cv_temporal_roc_auc_mean",
-    "label": "Best model 5-fold CV ROC-AUC (2011-2012)",
-    "source": "results/cv_metrics.csv",
-    "column": "roc_auc_mean",
-    "filter": {
-      "protocol": "temporal",
-      "model": "xgboost"
-    },
-    "value": 0.8042403450031482
+  "natality_xgboost_over_mlp_pct_random": {
+    "value": 0.8529,
+    "display": "+0.85",
+    "source": "results_summary/improvement_over_mlp.csv",
+    "filter": "dataset == natality, splits == random"
   },
-  {
-    "id": "cv_temporal_roc_auc_std",
-    "label": "Best model 5-fold CV ROC-AUC std",
-    "source": "results/cv_metrics.csv",
-    "column": "roc_auc_std",
-    "filter": {
-      "protocol": "temporal",
-      "model": "xgboost"
-    },
-    "value": 0.007113771529979705
+  "nhanes_domain_auc_time_min": {
+    "value": 0.864,
+    "display": "0.864",
+    "source": "results_summary/drift_domain.csv",
+    "filter": "dataset == nhanes, kind == time"
   },
-  {
-    "id": "domain_auc_2015",
-    "label": "Domain classifier ROC-AUC, 2011-2012 vs 2015-2016",
-    "source": "results/domain_classifier.csv",
-    "column": "roc_auc_mean",
-    "filter": {
-      "compared": "2015-2016"
-    },
-    "value": 0.5824631731536772
+  "nhanes_domain_auc_time_max": {
+    "value": 0.9743,
+    "display": "0.974",
+    "source": "results_summary/drift_domain.csv",
+    "filter": "dataset == nhanes, kind == time"
   },
-  {
-    "id": "max_ks_2015",
-    "label": "Largest KS statistic, 2015-2016 vs 2011-2012",
-    "source": "results/drift_numeric.csv",
-    "column": "ks_statistic",
-    "filter": {
-      "compared": "2015-2016"
-    },
-    "agg": "max",
-    "value": 0.05681866545196912
+  "brfss_domain_auc_time_min": {
+    "value": 0.759,
+    "display": "0.759",
+    "source": "results_summary/drift_domain.csv",
+    "filter": "dataset == brfss, kind == time"
   },
-  {
-    "id": "ablation_demographic_delta_roc_auc",
-    "label": "ROC-AUC change without demographics",
-    "source": "results/ablation.csv",
-    "column": "delta_roc_auc",
-    "filter": {
-      "configuration": "without demographic features"
-    },
-    "value": -0.08615516823828695
+  "brfss_domain_auc_time_max": {
+    "value": 0.7902,
+    "display": "0.790",
+    "source": "results_summary/drift_domain.csv",
+    "filter": "dataset == brfss, kind == time"
   },
-  {
-    "id": "ablation_anthropometric_delta_roc_auc",
-    "label": "ROC-AUC change without body measurements",
-    "source": "results/ablation.csv",
-    "column": "delta_roc_auc",
-    "filter": {
-      "configuration": "without anthropometric features"
-    },
-    "value": -0.04294033551658383
+  "natality_domain_auc_time_min": {
+    "value": 0.5521,
+    "display": "0.552",
+    "source": "results_summary/drift_domain.csv",
+    "filter": "dataset == natality, kind == time"
   },
-  {
-    "id": "mlp_best_epoch",
-    "label": "MLP early-stopping epoch (protocol A)",
-    "source": "results/mlp_history.csv",
-    "column": "best_epoch",
-    "filter": {
-      "protocol": "temporal"
-    },
-    "agg": "max",
-    "value": 22.0
+  "natality_domain_auc_time_max": {
+    "value": 0.5926,
+    "display": "0.593",
+    "source": "results_summary/drift_domain.csv",
+    "filter": "dataset == natality, kind == time"
+  },
+  "nhanes_prevalence_first_pct": {
+    "value": 10.3588,
+    "display": "10.4",
+    "source": "results_nhanes/drift_periods.csv",
+    "filter": "first period"
+  },
+  "nhanes_prevalence_last_pct": {
+    "value": 16.3986,
+    "display": "16.4",
+    "source": "results_nhanes/drift_periods.csv",
+    "filter": "last period"
+  },
+  "brfss_prevalence_first_pct": {
+    "value": 13.658,
+    "display": "13.7",
+    "source": "results_brfss/drift_periods.csv",
+    "filter": "first period"
+  },
+  "brfss_prevalence_last_pct": {
+    "value": 13.866,
+    "display": "13.9",
+    "source": "results_brfss/drift_periods.csv",
+    "filter": "last period"
+  },
+  "natality_prevalence_first_pct": {
+    "value": 9.644,
+    "display": "9.6",
+    "source": "results_natality/drift_periods.csv",
+    "filter": "first period"
+  },
+  "natality_prevalence_last_pct": {
+    "value": 10.484,
+    "display": "10.5",
+    "source": "results_natality/drift_periods.csv",
+    "filter": "last period"
   }
-]
+}

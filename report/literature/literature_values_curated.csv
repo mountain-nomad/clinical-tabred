@@ -1,7 +1,0 @@
-method,ref,dataset,protocol,metric,value,notes
-XGBoost,gardner2023tableshift,"BRFSS Diabetes (TableShift)","In-distribution test (White non-Hispanic)",accuracy,0.877,"Table 6, 95% CI (0.875, 0.879). Different survey (BRFSS), shift by race not time, accuracy metric; not directly comparable."
-XGBoost,gardner2023tableshift,"BRFSS Diabetes (TableShift)","Out-of-distribution test (other race/ethnicity groups)",accuracy,0.832,"Table 6, 95% CI (0.83, 0.834). Not directly comparable (see above)."
-LightGBM,gardner2023tableshift,"BRFSS Diabetes (TableShift)","In-distribution test (White non-Hispanic)",accuracy,0.876,"Table 6, 95% CI (0.874, 0.878). Not directly comparable."
-LightGBM,gardner2023tableshift,"BRFSS Diabetes (TableShift)","Out-of-distribution test (other race/ethnicity groups)",accuracy,0.833,"Table 6, 95% CI (0.831, 0.835). Not directly comparable."
-MLP,gardner2023tableshift,"BRFSS Diabetes (TableShift)","In-distribution test (White non-Hispanic)",accuracy,0.877,"Table 6, 95% CI (0.875, 0.879). Not directly comparable."
-MLP,gardner2023tableshift,"BRFSS Diabetes (TableShift)","Out-of-distribution test (other race/ethnicity groups)",accuracy,0.832,"Table 6, 95% CI (0.83, 0.833). Not directly comparable."

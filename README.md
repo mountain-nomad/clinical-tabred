@@ -1,119 +1,98 @@
-# Clinical TabReD Lite
+# Clinical TabReD
 
 **Evaluating Tabular Machine Learning Models under Temporal Distribution Shift in Healthcare Data**
 CSCI 447 Machine Learning: Theory and Practice · Fall 2026 · Project P034
 
-> **Current version (16 Nov 2026): three-dataset clinical TabReD benchmark.** NHANES 2005-2018
-> (diabetes, 280 features), BRFSS 2017-2023 (diabetes, 93) and NCHS natality 2016-2024 (preterm
-> birth, 73); 5 models x 7 TabReD-style splits, 5-fold CV, drift with clinical causes.
-> **Results: [`docs/RESULTS.md`](docs/RESULTS.md)** · tables: `results_summary/` · figures:
-> `figures_wide/` · data building and decisions: [`docs/HANDOFF_EXPANDED_NHANES.md`](docs/HANDOFF_EXPANDED_NHANES.md),
-> [`docs/HANDOFF_BRFSS_NATALITY.md`](docs/HANDOFF_BRFSS_NATALITY.md). The sections below describe the
-> original 9-feature NHANES 2011-2016 version (report and notebook still describe that version).
+A clinical version of the TabReD benchmark (Rubachev et al., 2024): three public US health data
+sources with a time axis, five tabular models, TabReD's time-based and random splits, and a drift
+analysis in which every drift is linked to its clinical cause.
 
-## Objective
-A small, reproducible benchmark (inspired by TabReD, Rubachev et al., 2024) that compares Logistic
-Regression, Random Forest, XGBoost, LightGBM and an MLP on three NHANES survey cycles and asks:
-1. How does performance differ between random and chronological splits?
-2. Which models generalise better to a newer survey cohort?
-3. Which feature distributions and target prevalences change between cycles?
-4. Can these observed changes help explain performance differences?
+| Dataset | Target | Periods | Rows x features |
+|---|---|---|---|
+| NHANES (interview + exam + lab) | diagnosed diabetes | 7 two-year cycles 2005-2018 | 37,287 x 280 |
+| BRFSS (telephone survey) | diagnosed diabetes | 7 years 2017-2023 | 350,000 x 93 |
+| NCHS natality (birth certificates) | preterm birth (< 37 weeks) | 9 years 2016-2024 | 450,000 x 73 |
 
-This is an educational prototype, not a validated clinical prediction system.
-Main results: see `results/model_comparison.md` (generated) and the figures in `figures/`.
+**Results:** [`docs/RESULTS.md`](docs/RESULTS.md) · tables: `results_summary/` · figures: `figures/` ·
+notebook: [`notebooks/CSCI447P034.ipynb`](notebooks/CSCI447P034.ipynb) · presentation material:
+`for_presentation/` · data building and decisions: [`docs/HANDOFF_EXPANDED_NHANES.md`](docs/HANDOFF_EXPANDED_NHANES.md),
+[`docs/HANDOFF_BRFSS_NATALITY.md`](docs/HANDOFF_BRFSS_NATALITY.md), [`DECISIONS.md`](DECISIONS.md).
 
-## Dataset
-CDC National Health and Nutrition Examination Survey (NHANES), public-use files:
-DEMO, BMX and DIQ for 2011-2012 (G), 2013-2014 (H) and 2015-2016 (I) from
-<https://wwwn.cdc.gov/nchs/nhanes/>. Target: `DIQ010` (self-reported diagnosed diabetes; adults ≥ 20).
-NHANES data are public-use; cite them as "Centers for Disease Control and Prevention, National Center
-for Health Statistics, National Health and Nutrition Examination Survey" with the URL above.
-Variables, coding and exclusions: `docs/FEATURES.md`.
+This is an educational benchmark, not a validated clinical prediction system.
+
+## Repository layout
+| Path | Content |
+|---|---|
+| `scripts/build_nhanes_table.py`, `parse_brfss_codebooks.py`, `build_brfss_table.py`, `build_natality_table.py` | raw files -> wide tables in `data/processed/` |
+| `scripts/leakage_audit.py` | univariate and missingness ROC-AUC of every feature (leakage screen) |
+| `scripts/run_benchmark.py` | 5 models x 7 splits per dataset -> `results_<dataset>/` |
+| `scripts/run_cv.py` | 5-fold CV on the default split's development periods |
+| `scripts/analyze_drift.py` | domain classifier, per-feature drift, documented clinical-cause events |
+| `scripts/summarize_benchmarks.py` | all datasets -> `results_summary/*.csv` + `summary.md` |
+| `scripts/make_figures.py`, `make_diagrams.py` | `figures/` (PNG 300 DPI, PDF, SVG; captions in `figures/captions.md`) |
+| `scripts/make_presentation_pack.py` | tables, chart data, figures and key numbers in `for_presentation/` |
+| `scripts/build_notebook.py` | generates `notebooks/CSCI447P034.ipynb` from the code above |
+| `src/clinical_tabred/` | shared code: preprocessing + models, tuning/evaluation, metrics + bootstrap, PSI, plot style |
+| `configs/experiment.yaml` | seed, hyperparameter grids, CV, bootstrap and MLP settings |
 
 ## Installation
 ```bash
-python3.12 -m venv .venv && source .venv/bin/activate
+python3.12 -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e .
-# macOS only: xgboost/lightgbm need OpenMP
-brew install libomp
 ```
-Optional tools: `tectonic` or `latexmk` (report PDF), LibreOffice + `pdftoppm` (sample-slide images).
 
-## Data download
-```bash
-python -m clinical_tabred.run --config configs/experiment.yaml --stage download
-```
-Files are validated (no HTML pages, SAS transport header, readable by pandas) and cached in
-`data/raw/`; `data/raw/manifest.csv` records URL, HTTP status, size and SHA-256.
+## Data
+Raw files go to `data/raw/` (not in git): NHANES `scripts/download_nhanes.ps1` (196 XPT files),
+BRFSS `scripts/download_brfss.ps1` (LLCP 2017-2023 zips + codebooks in `data/raw/brfss/codebooks/`),
+natality: `Nat<YEAR>us.zip` 2016-2024 from the NCHS Vital Statistics Online page into
+`data/raw/natality/` (never unzip them: ~5 GB each; the build script streams them).
+The processed BRFSS and natality tables are in git (`data/processed/*.csv.gz`); the NHANES table is
+rebuilt with `python scripts/build_nhanes_table.py`.
 
 ## Reproducing the experiment
 ```bash
-python -m clinical_tabred.run --config configs/experiment.yaml --stage all      # everything
-python -m clinical_tabred.run --config configs/experiment.yaml --stage train    # one stage
-python -m clinical_tabred.run --config configs/experiment.yaml --stage all --quick   # smoke test → results_quick/
-pytest -q                     # tests (no network); add --run-network for the real-download test
-ruff check src tests scripts
+for d in nhanes brfss natality; do
+  python scripts/leakage_audit.py  --dataset $d
+  python scripts/run_benchmark.py  --dataset $d      # ~10-80 min per dataset on 16 cores
+  python scripts/run_cv.py         --dataset $d
+  python scripts/analyze_drift.py  --dataset $d
+done
+python scripts/summarize_benchmarks.py && python scripts/make_figures.py && python scripts/make_diagrams.py
+python scripts/make_presentation_pack.py
+pytest -q
 ```
-Stages: `download, prepare, train, drift, figures, report, presentation, notebook`. Runtimes of the
-last run are stored in `results/run_metadata.json` (with package versions, seed and hardware).
+Run the jobs **one at a time**: XGBoost, LightGBM and scikit-learn each use all cores, and two jobs in
+parallel slowed both down 10-50x.
 
-## The standalone notebook
-`notebooks/CSCI447P034.ipynb` is the submitted file. It is **generated** from the package source
-(`notebooks/templates/*.md` + `inspect.getsource`), so notebook and repository use identical code.
+## The notebook
+`notebooks/CSCI447P034.ipynb` is the submitted notebook: the whole procedure (data loading,
+preprocessing and leakage audit, EDA, splits, training, CV, evaluation, drift, results) with the real
+code of `scripts/` and `src/`, copied in by `scripts/build_notebook.py`. Run it from `notebooks/`:
+by default it uses the saved results and re-trains the selected configuration of every model on the
+default split to check that they are reproduced (~10 min); `RUN_EXPERIMENTS = True` re-runs everything
+(~3 h). It writes its tables and figures to `notebooks/outputs/`.
 ```bash
-python -m clinical_tabred.run --stage notebook            # rebuild after any code change
-mkdir /tmp/nb_standalone && cp notebooks/CSCI447P034.ipynb /tmp/nb_standalone/ && cd /tmp/nb_standalone
-jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=1800 \
-    CSCI447P034.ipynb --output CSCI447P034.ipynb          # needs internet; installs missing packages
-python <repo>/scripts/compare_notebook_metrics.py /tmp/nb_standalone/notebook_outputs <repo>/results
+python scripts/build_notebook.py
+cd notebooks && jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=-1 CSCI447P034.ipynb
 ```
-It downloads data into `./nhanes_data/` and writes all outputs to `./notebook_outputs/`.
 
-## Regenerating `for_presentation/`
-```bash
-python -m clinical_tabred.run --stage presentation
-```
-The folder is self-contained (slides.md, style guide, tables, chart data, figures, diagrams,
-references, sample deck + rendered sample slides). See `for_presentation/README.md`.
-
-## Output files
+## Outputs per dataset (`results_nhanes/`, `results_brfss/`, `results_natality/`)
 | File | Content |
 |---|---|
-| `results/data_flow.csv` | Attrition per step and cycle (rows kept/removed, reason) |
-| `results/missingness.csv`, `missing_components.csv` | Missing % per feature/cycle; adults without BMX/DIQ |
-| `results/splits.csv` | Size and prevalence of every split |
-| `results/metrics.csv` | One row per protocol × seed × model × split × threshold rule; all metrics, confusion counts, timing |
-| `results/metrics_ci.csv` | Bootstrap 95% CIs of ROC-AUC and PR-AUC |
-| `results/paired_comparisons.csv` | Paired bootstrap: selected model minus each other model (2015-2016) |
-| `results/period_gaps.csv` | A2 in-period minus future, and random minus chronological, with CIs |
-| `results/random_seeds_summary.csv` | Protocol B mean ± std over 5 seeds |
-| `results/cv_folds.csv`, `cv_metrics.csv` | 5-fold CV per fold and mean ± std |
-| `results/tuning.csv`, `selected_models.json` | Every tried configuration; chosen parameters and thresholds |
-| `results/mlp_history.csv` | MLP loss/accuracy per epoch, early-stopping epoch |
-| `results/ablation.csv` | Ablation of the selected model (deltas vs full model) |
-| `results/cycle_summary.csv`, `drift_numeric.csv`, `drift_categorical.csv`, `domain_classifier.csv` | Drift analysis |
-| `results/predictions/<protocol>_<model>.csv` | Test labels, probabilities, cycle |
-| `results/related_work.csv`, `literature_comparison.csv` | Literature tables (values copied from opened sources) |
-| `results/model_comparison.md` | Readable summary with computed findings |
-| `figures/fig01–fig09.{png,pdf}`, `figures/captions.md` | Figures (300 DPI) and captions |
-| `report/main.tex`, `report/main.pdf` | IEEE report (tables generated into `report/tables/`) |
+| `metrics.csv` | one row per split x model x part (train/val/test) x threshold rule: all metrics, confusion counts, timing |
+| `tuning.csv`, `selected_models.json` | every tried configuration; selected parameters, threshold, MLP best epoch |
+| `predictions/test_predictions.csv(.gz)` | test labels and probabilities of every split and model |
+| `default_test_ci.csv`, `default_paired_comparisons.csv` | bootstrap CIs and paired model differences, default split |
+| `random_minus_time_by_window.csv`, `ranking_time_vs_random.csv` | TabReD random-vs-time comparison |
+| `cv_folds.csv`, `cv_summary.csv` | 5-fold CV |
+| `drift_*.csv` | periods, domain classifier, feature drift, clinical-cause events, drift vs performance |
+| `leakage_audit.csv` | leakage screen |
 
 ## Limitations
-* NHANES is a cross-sectional population survey, not longitudinal hospital EHR data.
-* Models are trained without survey weights (weighted prevalence is reported only descriptively).
-* The label is self-reported diagnosed diabetes; undiagnosed diabetes counts as negative.
-* Body measurements are taken after a possible diagnosis (possible reverse causation).
-* Random and chronological test sets contain different people, so their difference is not purely temporal.
-* Three cycles, nine features and small grids; observed changes are described, not explained causally.
+One seed and small grids; no CatBoost / MLP-PLR; BRFSS and natality have fewer features than
+TabReD's datasets; survey weights are not used; NHANES and BRFSS labels are self-reported diagnoses;
+causal explanations of drift are hypotheses consistent with the data. See `docs/RESULTS.md`, section 4.
 
-## Differences from the full TabReD benchmark
-The TabReD repository (`yandex-research/tabred`) contains `paper/` (code to reproduce the paper),
-`preprocessing/` (dataset preparation) and `src/tabred/` (a downloader package/CLI) for eight
-industry-grade datasets with a default split plus `random-{0,1,2}` and `sliding-window-{0,1,2}`
-splits, and evaluates many deep-learning and GBDT methods. This project instead uses three public
-NHANES cycles (sizes in `results/cycle_summary.csv`), nine features, five standard models with small grids, CPU-only
-training, and adds an in-period reference protocol and bootstrap CIs. Its datasets were not downloaded.
-
-## Project documents
-`DECISIONS.md` (choices and reasons) · `docs/FEATURES.md` · `docs/WALKTHROUGH.md` · `report/README.md`.
+The original 9-feature NHANES 2011-2016 version of the project (report, notebook, presentation pack)
+is in the git history (commit `1dc9dba`, before this version).

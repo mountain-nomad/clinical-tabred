@@ -1,37 +1,30 @@
-"""Static checks that the submitted notebook is standalone (no package, no repo paths)."""
-
+"""The submitted notebook must match the repository code and contain the required sections."""
 import json
-import re
 
-import pytest
+import nbformat
+from build_notebook import OUT, build
 from conftest import REPO
 
-NOTEBOOK = REPO / "notebooks" / "CSCI447P034.ipynb"
-REPO_PATH = re.compile(r"""["'](\.\./)?(configs|data/processed|data/raw|results|figures|src)(/|["'])""")
+SECTIONS = ["## 1. Project introduction", "## 2. Dataset description", "## 3. Data loading",
+            "## 4. Data preprocessing", "## 5. Exploratory data analysis", "## 6. Train/test splitting",
+            "## 7. Cross-validation", "## 8. Model training", "## 9. Model evaluation",
+            "## 10. Temporal drift analysis", "## 11. Results and comparison", "## 12. Limitations and conclusion"]
 
 
-@pytest.fixture(scope="module")
-def code_cells() -> list[str]:
-    if not NOTEBOOK.exists():
-        pytest.skip("notebook not built yet (run --stage notebook)")
-    notebook = json.loads(NOTEBOOK.read_text())
-    return ["".join(c["source"]) for c in notebook["cells"] if c["cell_type"] == "code"]
+def test_notebook_is_up_to_date_with_the_code():
+    saved = nbformat.read(OUT, 4)
+    fresh = build()
+    assert [c.source for c in saved.cells] == [c.source for c in fresh.cells], \
+        "notebook is stale: run python scripts/build_notebook.py and execute it"
 
 
-def test_notebook_does_not_import_project_package(code_cells):
-    for source in code_cells:
-        assert "import clinical_tabred" not in source
-        assert "from clinical_tabred" not in source
-
-
-def test_notebook_does_not_read_repository_paths(code_cells):
-    for source in code_cells:
-        assert not REPO_PATH.search(source), REPO_PATH.search(source).group(0)
-        assert "experiment.yaml" not in source
-
-
-def test_notebook_defines_config_and_downloads_data(code_cells):
-    joined = "\n".join(code_cells)
-    assert "CONFIG = {" in joined
-    assert "download_all(CONFIG, RAW_DIR)" in joined
-    assert "'raw_dir': 'nhanes_data'" in joined
+def test_notebook_has_all_sections_and_ran_without_errors():
+    nb = nbformat.read(OUT, 4)
+    text = "\n".join(c.source for c in nb.cells if c.cell_type == "markdown")
+    for section in SECTIONS:
+        assert section in text
+    code = [c for c in nb.cells if c.cell_type == "code"]
+    assert all(c.execution_count for c in code), "notebook is not fully executed"
+    assert not [o for c in code for o in c.outputs if o.output_type == "error"]
+    assert OUT.name == json.loads((REPO / "configs" / "experiment.yaml").read_text().split("notebook_name: ")[1]
+                                  .split("\n")[0])

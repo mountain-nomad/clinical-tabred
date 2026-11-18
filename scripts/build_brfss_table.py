@@ -12,7 +12,7 @@ Target: "(Ever told) you have diabetes" (DIABETE3 in 2017-18, DIABETE4 from 2019
 drawn per year (default 50,000, fixed seed): each year has ~400-450K respondents and TabReD also
 subsampled its largest datasets.
 
-Cleaning follows scripts/build_wide_table.py (NHANES):
+Cleaning follows scripts/build_nhanes_table.py (NHANES):
 1. Renamed questions are harmonised to one name (HARMONISE) when the codes are the same;
    income (INCOME2 -> INCOME3 in 2021, more top categories) is collapsed to the old 8 levels.
 2. Don't know / not sure / refused / not asked codes -> missing, taken from the CDC codebook of

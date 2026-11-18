@@ -1,12 +1,13 @@
-# Clinical TabReD Lite: the single configuration file for the whole project.
-# All code reads its settings from this dictionary; nothing is hardcoded elsewhere.
+# Clinical TabReD: shared settings of the benchmark (scripts/run_benchmark.py, run_cv.py,
+# analyze_drift.py, summarize_benchmarks.py) and of the notebook. Dataset definitions (periods,
+# splits) are in DATASETS in scripts/run_benchmark.py.
 
 project:
   course: "CSCI 447 Machine Learning: Theory and Practice"
   semester: "Fall 2026"
   project_id: "P034"
   notebook_name: "CSCI447P034.ipynb"
-  title: "Clinical TabReD Lite"
+  title: "Clinical TabReD"
   full_title: "Evaluating Tabular Machine Learning Models under Temporal Distribution Shift in Healthcare Data"
   students:
     - {name: "Nurbek Baktygali", id: "202127847"}
@@ -14,62 +15,6 @@ project:
   instructor: "Dr. Hari Mohan Rai, Assistant Professor, Department of Computer Science, SCAI, Nazarbayev University"
 
 seed: 42
-n_jobs: 4
-
-paths:
-  raw_dir: data/raw
-  processed_dir: data/processed
-  results_dir: results
-  figures_dir: figures
-
-# NHANES cycles in chronological order. The suffix is the letter used in file names.
-cycles:
-  - {name: "2011-2012", suffix: "G", start_year: 2011, end_year: 2012}
-  - {name: "2013-2014", suffix: "H", start_year: 2013, end_year: 2014}
-  - {name: "2015-2016", suffix: "I", start_year: 2015, end_year: 2016}
-
-download:
-  components: [DEMO, BMX, DIQ]
-  primary_url: "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/{start_year}/DataFiles/{component}_{suffix}.xpt"
-  fallback_url: "https://wwwn.cdc.gov/Nchs/Nhanes/{start_year}-{end_year}/{component}_{suffix}.XPT"
-  timeout_s: 60
-  retries: 3
-  user_agent: "Mozilla/5.0 (educational research script; clinical-tabred-lite)"
-
-data:
-  min_age: 20
-  target_column: DIQ010
-  positive_code: 1
-  negative_code: 2
-  numeric_features: [RIDAGEYR, INDFMPIR, BMXBMI, BMXWAIST, BMXHT, BMXWT]
-  categorical_features: [RIAGENDR, RIDRETH3, DMDEDUC2]
-  # Codes that mean "refused" / "don't know" and must become missing values.
-  special_missing_codes:
-    DMDEDUC2: [7, 9]
-  # Columns kept for description only (never used as model inputs).
-  metadata_columns: [SEQN, cycle, WTINT2YR]
-  feature_groups:
-    demographic: [RIDAGEYR, RIAGENDR, RIDRETH3]
-    socioeconomic: [DMDEDUC2, INDFMPIR]
-    anthropometric: [BMXBMI, BMXWAIST, BMXHT, BMXWT]
-  prevalence_bounds: [0.05, 0.25]
-  # Human-readable labels for categorical codes (from the official NHANES codebooks).
-  category_labels:
-    RIAGENDR: {1: "Male", 2: "Female"}
-    RIDRETH3: {1: "Mexican American", 2: "Other Hispanic", 3: "Non-Hispanic White",
-               4: "Non-Hispanic Black", 6: "Non-Hispanic Asian", 7: "Other/multi-racial"}
-    DMDEDUC2: {1: "Less than 9th grade", 2: "9-11th grade", 3: "High school/GED",
-               4: "Some college/AA", 5: "College graduate+"}
-
-drift:
-  reference_cycle: "2011-2012"
-  psi_bins: 10
-
-protocols:
-  temporal: {train: "2011-2012", val: "2013-2014", test: "2015-2016"}
-  in_period: {holdout_fraction: 0.2}
-  random: {train: 0.70, val: 0.15, test: 0.15, seeds: [42, 43, 44, 45, 46]}
-
 cv:
   n_splits: 5
 
@@ -102,10 +47,3 @@ models:
   mlp:
     hidden_layer_sizes: [[64], [64, 32]]
     alpha: [0.0001, 0.01]
-
-# Settings used by --quick (smoke test on a small subset).
-quick:
-  rows_per_cycle: 800
-  n_resamples: 50
-  random_seeds: [42]
-  max_epochs: 15

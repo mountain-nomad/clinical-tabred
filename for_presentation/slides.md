@@ -1,6 +1,9 @@
-# Slide content — Clinical TabReD Lite
+# Slide content — Clinical TabReD (P034)
 
-Every number below is generated from the results folder. Sentences marked [REVIEW] must be rewritten by the students.
+Slide-by-slide content for the final presentation, in the layout of the course sample deck
+(`reference/sample_slides/sample-NN.png`, style in `style_guide.md`). Every number comes from
+`key_numbers.json`, `tables/` or `../docs/RESULTS.md` (all computed from the saved results).
+`[CHECK]` marks items the presenters must confirm or adapt.
 
 ## Slide 1 — Title
 Layout: sample-01.png
@@ -9,18 +12,18 @@ Presenter: 1
 Content:
 - Course line: CSCI 447 MACHINE LEARNING: THEORY AND PRACTICE · FINAL PROJECT · FALL 2026
 - Project ID: P034
-- Title: Clinical TabReD Lite
+- Title: Clinical TabReD
 - Subtitle: Evaluating Tabular Machine Learning Models under Temporal Distribution Shift in Healthcare Data
 - Submitted by:
 - Nurbek Baktygali, 202127847
 - Yelzhan Rakhimzhanov, 202197093
 - Submitted to: Dr. Hari Mohan Rai, Assistant Professor, Department of Computer Science, SCAI, Nazarbayev University
-- Footer: CSCI 447 Machine Learning: Theory and Practice   |   Project ID: P034   |   Clinical TabReD Lite
+- Footer: CSCI 447 Machine Learning: Theory and Practice   |   Project ID: P034   |   Clinical TabReD
 Visuals: none
 Caption: none
 Big numbers: none
 Speaker notes:
-Introduce the team and the project title. The notebook file is CSCI447P034.ipynb (check the course naming rule).
+Introduce the team and the project. The notebook is CSCI447P034.ipynb.
 
 ## Slide 2 — Presentation Roadmap
 Layout: sample-02.png
@@ -30,163 +33,162 @@ Content:
 1 Abstract · 2 Introduction · 3 Background and Related Work · 4 Methodology / Project Approach ·
 5 Implementation and System Design · 6 Evaluation and Results · 7 Discussion ·
 8 Conclusion and Future Work · 9 References
-Callout: Presenter 1: Sections 1–4 | Presenter 2: Sections 5–9
+Callout: Presenter 1: Sections 1–4 | Presenter 2: Sections 5–9 [CHECK]
 Visuals: none
 Caption: none
 Big numbers: none
 Speaker notes:
-The outline follows the nine report sections. Presenter 1 covers sections 1–4 and Presenter 2 covers sections 5–9.
+Nine sections, same order as the report.
 
 ## Slide 3 — Abstract
 Layout: sample-03.png
 Section label: SECTION 1 · ABSTRACT
 Presenter: 1
 Content:
-- Aim: Test whether tabular models trained on older NHANES cycles keep their performance on a newer cycle.
-- Methodology: 5 models, chronological (2011-12 → 2013-14 → 2015-16) vs random vs in-period splits, 5-fold CV, bootstrap CIs, drift statistics.
-- Results: XGBoost (selected on validation) ROC-AUC 0.791 [0.775, 0.807] on 2015-16; random-minus-chronological gap -0.004 [-0.033, +0.023].
-- Conclusion: [REVIEW] Domain-classifier ROC-AUC 0.582; the random-vs-chronological gap is inconclusive (the 95% CI includes zero); the in-period-vs-future gap is inconclusive (the 95% CI includes zero).
+- Aim: Build a clinical TabReD — a temporal-shift benchmark from public health data with each drift linked to its clinical cause — and test whether TabReD's conclusions hold in healthcare.
+- Data: NHANES 2005–2018 (diabetes, 280 features), BRFSS 2017–2023 (diabetes, 93), NCHS natality 2016–2024 (preterm birth, 73).
+- Method: 5 models × 7 TabReD splits (default time split, 3 sliding windows, 3 size-matched random splits), bootstrap CIs, 5-fold CV, drift analysis with documented causes.
+- Results: GBDTs are best everywhere (test ROC-AUC 0.900 / 0.826 / 0.750). Random splits overestimate future performance in the diabetes datasets and reorder models in NHANES, but not for preterm birth.
+- Conclusion: the type of drift (label shift, coding revisions) matters more than its size.
 Visuals: none
 Caption: none
 Big numbers: none
 Speaker notes:
-One sentence each for aim, method, result and conclusion. [REVIEW] Explain in your own words why the CIs matter for the conclusion.
+One sentence each for aim, data, method, results, conclusion.
 
 ## Slide 4 — Problem, Motivation and Objectives
 Layout: sample-04.png
 Section label: SECTION 2 · INTRODUCTION
 Presenter: 1
 Content:
-Problem: clinical models are trained on past patients but used on later ones; random splits can hide this time gap [1].
+Problem: clinical models are trained on past patients and used on future ones; random train/test splits ignore time. TabReD [1] showed on 8 industrial datasets that this misjudges performance and model rankings, but it has no healthcare data.
 Objectives:
-1 Compare random vs chronological evaluation — RQ1
-2 Find which models transfer to a newer cohort — RQ2
-3 Measure feature and prevalence changes between cycles — RQ3
-4 Relate observed changes to performance — RQ4
+1 Test whether random splits misjudge future performance and the model ranking — RQ1
+2 Find which models transfer best to later periods — RQ2
+3 Measure what drifts and identify its clinical cause — RQ3
+4 Relate the type and size of drift to the performance gaps — RQ4
 Visuals: none
 Caption: none
-Big numbers: 15.1% — adults reporting diagnosed diabetes in 2015-2016 (unweighted sample, Table 1)
+Big numbers: 10.4% → 16.4% — diagnosed diabetes in NHANES, 2005-06 → 2017-18 (key_numbers: nhanes_prevalence_first_pct / last_pct)
 Speaker notes:
-Introduce the deployment-over-time problem with the TabReD motivation [1]. [REVIEW] Say why diabetes in NHANES is a reasonable small test case.
+The prevalence rise is a first example of temporal shift in clinical data.
 
-## Slide 5 — Survey Cycles at a Glance
+## Slide 5 — Three Clinical Datasets
 Layout: sample-05.png
 Section label: SECTION 2 · INTRODUCTION
 Presenter: 1
 Content:
-Table of the three cycles: adults, positives, unweighted and survey-weighted prevalence, mean age, mean BMI.
-Takeaway: [REVIEW] Prevalence rises in the newest cycle while age and BMI change only slightly.
-Visuals: tables/t01_cycle_context.md
-Caption: Table 1: Eligible adults and diabetes prevalence per NHANES cycle (computed from the data).
+Table: source, target, periods, rows × features, positive rate (first → last period) for NHANES, BRFSS and natality.
+Takeaway: three different kinds of clinical data (exam + lab, telephone survey, birth certificates) with 7–9 periods each.
+Visuals: tables/t01_datasets.md
+Caption: Table 1: The three datasets of the benchmark.
 Big numbers: none
 Speaker notes:
-All values are computed from the downloaded data, not taken from external statistics. Weighted prevalence uses the interview weight WTINT2YR and is descriptive only.
+BRFSS and natality are sampled to 50,000 rows per year with a fixed seed (TabReD also subsampled its largest datasets). Rows are different people in every period.
 
 ## Slide 6 — Project Timeline
 Layout: sample-06.png
 Section label: SECTION 2 · INTRODUCTION
 Presenter: 1
 Content:
-Gantt chart of the planned work (weeks): literature review, download and codebook check,
-data preparation, splits and baselines, tuning/CV/MLP, evaluation and ablation, drift analysis,
-notebook/report/presentation.
-Visuals: tables/t02_timeline.md | charts_data/c10_gantt.csv
-Caption: Table 2: Planned project timeline (same as the report).
+Phases: literature review (TabReD) → original 9-feature NHANES prototype → wide NHANES table 2005–2018 (280 features) → BRFSS and natality tables + leakage audits → benchmark (5 models × 7 splits × 3 datasets) → CV and drift analysis → notebook, report, presentation.
+Visuals: none (draw as a timeline) [CHECK: add your real dates]
+Caption: Fig. 1: Project timeline.
 Big numbers: none
 Speaker notes:
-This is the planned schedule; adjust the weeks to your real dates. It must match the timeline table in the report.
+The project grew from one small NHANES table to three wide clinical tables.
 
 ## Slide 7 — Related Work and Research Gap
 Layout: sample-07.png
 Section label: SECTION 3 · BACKGROUND AND RELATED WORK
 Presenter: 1
 Content:
-Table of four related studies: approach, reference, data, split type, key finding.
-Research gap: [REVIEW] few small, fully reproducible studies of temporal shift on public health-survey data.
-Visuals: tables/t03_related_work.md
-Caption: Table 3: Related work (findings quoted from the cited abstracts).
+- TabReD [1]: time-based splits on industrial data; random splits misjudge performance; GBDTs and MLP-PLR strongest.
+- TableShift [2]: distribution-shift tasks incl. BRFSS diabetes, but shifts by population group, not time.
+- Grinsztajn et al. [3]: tree models outperform deep learning on medium-sized tabular data.
+- Rabanser et al. [4]: domain classifiers detect dataset shift.
+Research gap: no TabReD-style temporal benchmark on clinical data, and drift is rarely linked to its cause.
+Visuals: none
+Caption: none
 Big numbers: none
 Speaker notes:
-TabReD [1] motivates time-based splits; TableShift [2] includes a BRFSS diabetes task with a race-based shift. [REVIEW] State the gap in your own words.
+Our contribution: a clinical TabReD with documented drift causes, and a same-period comparison of random vs time splits.
 
 ## Slide 8 — Proposed Methodology
 Layout: sample-08.png
 Section label: SECTION 4 · METHODOLOGY / PROJECT APPROACH
 Presenter: 1
 Content:
-8 steps: 1 Download (validated XPT) → 2 Prepare (merge, label, filter) → 3 Features (9 inputs) →
-4 Split (A / A2 / B) → 5 Cross-validation (5-fold) → 6 Training (5 models) → 7 Evaluation
-(metrics, CIs, ablation) → 8 Drift (KS, PSI, domain classifier)
+7 steps: 1 Public data → 2 Build tables (harmonise codes, missing codes, every-period rule) → 3 Leakage audit → 4 TabReD splits → 5 Train 5 models (tuned on validation) → 6 Evaluate (metrics, bootstrap CIs, random vs time, same-period, CV) → 7 Drift by cause
 Visuals: diagrams/d01_methodology.svg
-Caption: Fig. 1: Proposed methodology.
+Caption: Fig. 2: Methodology.
 Big numbers: none
 Speaker notes:
-Walk through the eight steps left to right. Stress that test data is used once and preprocessing is fitted on training data only.
+Test data are used once; preprocessing, model choice and threshold use training/validation only.
 
-## Slide 9 — Dataset Description
+## Slide 9 — Data Preparation and Leakage Control
 Layout: sample-09.png
 Section label: SECTION 4 · METHODOLOGY / PROJECT APPROACH
 Presenter: 1
 Content:
-CDC NHANES public files [5]: DEMO, BMX, DIQ for 2011-12 (G), 2013-14 (H), 2015-16 (I).
-Target DIQ010: 1 = yes, 2 = no; 3/7/9/missing excluded. Adults ≥ 20 with an exam record.
-Visuals: tables/t04_dataset.md
-Caption: Table 4: Dataset composition per cycle.
-Big numbers: 15,964 — eligible adults | 13.0% → 15.1% — prevalence 2011-12 → 2015-16 | 9 — input features
+- Special codes ("don't know", "refused") → missing; renamed BRFSS questions harmonised; only features present in every period; IDs, weights, dates and >95%-empty columns removed; rows never dropped.
+- Leakage removed by rule: diabetes/insulin/glucose questions (asked only of diabetics), consequences of the diagnosis (e.g. pneumococcal vaccine), and for natality everything recorded at or after delivery.
+- Audit: no remaining feature predicts the label on its own with ROC-AUC > 0.80, and no missingness pattern does.
+Visuals: none (optional: results_*/leakage_audit.csv)
+Caption: none
+Big numbers: 280 | 93 | 73 — features (NHANES | BRFSS | natality)
 Speaker notes:
-Data are downloaded from the CDC site inside the notebook; nothing is uploaded. The data-flow table in the notebook lists every exclusion.
+Strongest single predictors are plausible risk factors (age, BMI, general health, plurality), not restatements of the label.
 
-## Slide 10 — Features and Preprocessing
+## Slide 10 — Split Design (TabReD)
 Layout: sample-10.png
 Section label: SECTION 4 · METHODOLOGY / PROJECT APPROACH
 Presenter: 1
 Content:
-Table: feature, type, source file, missing % (2015-16), preprocessing.
-Diagram: three feature groups → numeric / categorical pipelines → model input.
-Visuals: tables/t05_features.md | diagrams/d04_features.svg
-Caption: Table 5: Features and preprocessing. Fig. 2: Feature groups and pipelines.
+- Default time split: train early periods → validate next → test latest.
+- Sliding windows (×3): train 3 periods → validate 1 → test 1.
+- Random splits (×3): the rows of each window shuffled and re-split into the same sizes.
+Visuals: diagrams/d03_splits.svg | tables/t02_splits.md
+Caption: Fig. 3: Time-based splits per dataset. Table 2: Split periods.
 Big numbers: none
 Speaker notes:
-Codes such as education 7/9 become missing. Laboratory diabetes markers and survey weights are never used as inputs.
+Random-k differs from sliding-window-k only by ignoring time order, so their difference measures the cost of ignoring time.
 
 ## Slide 11 — Mathematical Formulation
 Layout: sample-11.png
 Section label: SECTION 4 · METHODOLOGY / PROJECT APPROACH
 Presenter: 1
 Content:
-Six numbered equations (1)–(6) from equations.md: logistic model, precision/recall, F1,
-KS statistic, PSI, CV mean and standard deviation.
+Equations (1)–(8) from equations.md: logistic model, F1, ROC-AUC, PSI, TVD, bootstrap CI, random-minus-time gap, relative improvement over the MLP.
 Visuals: equations.md
-Caption: Equations (1)–(6).
+Caption: Equations (1)–(8).
 Big numbers: none
 Speaker notes:
-Explain each symbol briefly. KS and PSI measure distribution change; the bootstrap interval (7) is used on the results slides.
+(7) and (8) are the two quantities TabReD reports; we add bootstrap CIs to them.
 
 ## Slide 12 — Technology Stack and Experimental Setup
 Layout: sample-12.png
 Section label: SECTION 5 · IMPLEMENTATION AND SYSTEM DESIGN
 Presenter: 2
 Content:
-Table of tools and exact versions; hardware and reproducibility notes (seed, n_jobs, CPU only).
-Visuals: tables/t06_tech_stack.md
-Caption: Table 6: Technology stack (versions recorded at run time).
-Big numbers: none
+Tools and versions; CPU-only training (16 cores, one job at a time); seed 42; small predefined grids; 1,000 bootstrap resamples.
+Visuals: tables/t14_tech_stack.md
+Caption: Table 3: Technology stack.
+Big numbers: 105 — trained model selections (5 models × 7 splits × 3 datasets)
 Speaker notes:
-Every version is pinned in requirements.txt and recorded in results/run_metadata.json; the notebook installs only missing packages.
+The full benchmark takes about 3 hours on a 16-core CPU; running two jobs in parallel slowed both 10–50× (thread oversubscription).
 
 ## Slide 13 — System Architecture
 Layout: sample-13.png
 Section label: SECTION 5 · IMPLEMENTATION AND SYSTEM DESIGN
 Presenter: 2
 Content:
-Diagram: ColumnTransformer → 5 models → threshold (max F1 on validation) → metrics.
-3 steps: 1 Fit preprocessing on training split only · 2 Tune each model on validation PR-AUC ·
-3 Report test metrics at 0.5 and tuned threshold with bootstrap CIs
+Wide table → ColumnTransformer (fit on train only) → 5 models → selection by validation PR-AUC → threshold max F1 on validation → test scored once with bootstrap CIs.
 Visuals: diagrams/d02_architecture.svg
-Caption: Fig. 3: System architecture.
+Caption: Fig. 4: Model pipeline.
 Big numbers: none
 Speaker notes:
-All five models share the same preprocessing. Class imbalance is handled with balanced weights or scale_pos_weight.
+Class imbalance: balanced class weights / scale_pos_weight; the MLP uses balanced sample weights and early stopping.
 
 ## Slide 14 — Core Algorithm
 Layout: sample-14.png
@@ -195,181 +197,203 @@ Presenter: 2
 Content:
 Algorithm 1 pseudocode (algorithm.md) with grouped explanations on the right.
 Visuals: algorithm.md
-Caption: Algorithm 1: Temporal benchmark for one protocol.
+Caption: Algorithm 1: Clinical TabReD benchmark for one dataset.
 Big numbers: none
 Speaker notes:
-Explain the groups, not every line: tuning loop, MLP epoch loop with early stopping, threshold choice on validation, single test evaluation.
+Explain the groups: splits, tuning loop, threshold, single test evaluation, random-vs-time comparison.
 
-## Slide 15 — Experimental Design: Split and Cross-Validation
+## Slide 15 — Experimental Design: Evaluation and Cross-Validation
 Layout: sample-15.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-A chronological: train 2011-12 → validate 2013-14 → test 2015-16 (once).
-A2 in-period: same model, 20% holdout of 2011-12 vs 2015-16.
-B random: pooled 70/15/15, 5 seeds. CV: 5-fold stratified on development data only.
-Why both? CV measures in-period (i.i.d.) stability; chronological testing measures transfer to a later cohort.
-Visuals: diagrams/d03_protocols.svg
-Caption: Fig. 4: Evaluation protocols.
+- Main metric ROC-AUC (independent of threshold and of prevalence, which drifts); PR-AUC, accuracy, precision, recall, F1, confusion matrix also reported.
+- 95% bootstrap CIs (1,000 resamples); paired bootstrap for model differences; unpaired for random vs time.
+- 5-fold stratified CV on the development periods only (in-period performance and stability).
+- New: random vs time scored on the same test period.
+Visuals: none
+Caption: none
 Big numbers: none
 Speaker notes:
-Say clearly that the test set is never used for tuning or thresholds. Random and chronological test sets contain different people.
+CV measures in-period performance; the time split measures transfer to the future. Their difference is the same question as random vs time.
 
-## Slide 16 — Results on the Chronological Test Set
+## Slide 16 — Results on the Default Time Split
 Layout: sample-16.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-All metrics for 5 models on 2015-16 (validation-tuned threshold); best value per column marked with ** in the table file.
-Visuals: tables/t07_temporal_test_results.md
-Caption: Table 7: Performance on the 2015-2016 test set.
-Big numbers: 0.791 — XGBoost ROC-AUC | 0.368 — XGBoost PR-AUC | 65.6% — XGBoost recall
+All metrics of the 5 models on each dataset's test periods (validation-tuned threshold).
+Takeaway: GBDTs best on all three datasets; NHANES separates models most (0.876–0.900), BRFSS and natality only about 0.005.
+Visuals: tables/t03_default_test_metrics.md
+Caption: Table 4: Test performance on the default time split.
+Big numbers: 0.900 — NHANES XGBoost | 0.826 — BRFSS LightGBM | 0.750 — natality XGBoost (test ROC-AUC)
 Speaker notes:
-The selected model was chosen on validation, not on this table. [REVIEW] Point out how close the five models are.
+In NHANES the model chosen on validation (MLP, 0.887) is significantly worse than XGBoost on the later test years.
 
 ## Slide 17 — Model Performance Comparison
 Layout: sample-17.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-Chart: ROC-AUC and PR-AUC per model with 95% bootstrap CIs (Eq. 7).
-Reading the chart: [REVIEW] compare the interval widths and overlaps; paired-bootstrap differences are in results/paired_comparisons.csv.
-Visuals: figures/f05_auc_ci.png | charts_data/c01_auc_ci.csv
-Caption: Fig. 5: ROC-AUC and PR-AUC on 2015-2016 with 95% bootstrap CIs.
+Test ROC-AUC per model with 95% bootstrap CIs, one panel per dataset; paired bootstrap differences in tables/t04_paired_comparisons.md.
+Visuals: figures/fig02_default_auc_ci.png | charts_data/c02_default_auc_ci.csv
+Caption: Fig. 5: Default-split test ROC-AUC with 95% bootstrap CIs.
 Big numbers: none
 Speaker notes:
-The x-axis does not start at zero; say so. Paired results are in results/paired_comparisons.csv.
+The x-axes do not start at zero. Small absolute differences are significant because the test sets are large (BRFSS 100,000, natality 100,000 rows).
 
 ## Slide 18 — Cross-Validation Results
 Layout: sample-18.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-Per-fold ROC-AUC and mean ± std for protocol A (2011-12 training cycle).
-Consistency check: XGBoost CV ROC-AUC 0.804 ± 0.007 vs chronological test 0.791.
-Visuals: tables/t08_cv_results.md | charts_data/c11_cv_folds.csv
-Caption: Table 8: 5-fold stratified CV ROC-AUC (protocol A).
+5-fold CV ROC-AUC (mean ± std) per model and dataset; fold std ≤ 0.005.
+In-period CV is higher than the future test for NHANES (≈0.91 vs 0.88–0.90) and BRFSS (≈0.83 vs 0.82–0.83), equal for natality (≈0.75).
+Visuals: tables/t09_cross_validation.md | figures/fig09_cross_validation.png | charts_data/c09_cv_folds.csv
+Caption: Table 5: 5-fold CV on the development periods. Fig. 6: CV ROC-AUC per fold.
 Big numbers: none
 Speaker notes:
-A small standard deviation shows stable in-period results. [REVIEW] Compare the CV mean with the chronological test value.
+Same pattern as random vs time: in-period evaluation is optimistic for the diabetes datasets.
 
 ## Slide 19 — Training Curves
 Layout: sample-19.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-MLP train and validation loss and accuracy per epoch; early stopping at epoch 22 (patience 10).
-Visuals: figures/f06_mlp_curves.png | charts_data/c02_mlp_history.csv
-Caption: Fig. 6: MLP loss and accuracy curves (protocol A).
+MLP train and validation loss per epoch (default split); dashed line = early-stopping epoch. Validation is a later period, so the gap includes temporal shift.
+Visuals: figures/fig06_mlp_training_curves.png | charts_data/c06_mlp_history.csv
+Caption: Fig. 7: MLP training curves.
 Big numbers: none
 Speaker notes:
-Curves are the real history of the evaluated MLP. Loss uses balanced sample weights, the same as in training.
+Curves are the recorded history of the evaluated MLP (balanced log loss).
 
-## Slide 20 — Confusion Matrix and ROC Curves
+## Slide 20 — Confusion Matrices and ROC Curves
 Layout: sample-20.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-XGBoost confusion matrix on 2015-16 at threshold 0.60 (left); ROC curves of all models (right).
-Visuals: figures/f07_confusion_matrix.png | figures/f08_roc_curves.png | charts_data/c04_confusion_matrix.csv | charts_data/c03_roc_points.csv
-Caption: Fig. 7: Confusion matrix (selected model). Fig. 8: ROC curves on 2015-2016.
+Confusion matrix of the validation-selected model per dataset (max-F1 threshold); ROC curves of all models.
+Recall at the chosen threshold: ≈0.67 (NHANES), ≈0.58 (BRFSS), ≈0.42 (natality).
+Visuals: figures/fig05_confusion_matrices.png | figures/fig04_roc_curves.png | charts_data/c05_confusion_matrices.csv | charts_data/c04_roc_points.csv
+Caption: Fig. 8: Confusion matrices. Fig. 9: ROC curves on the default test periods.
 Big numbers: none
 Speaker notes:
-The threshold maximises F1 on validation. [REVIEW] Comment on false positives versus missed cases.
+Preterm birth is much harder to predict from information available before delivery.
 
-## Slide 21 — Ablation Study
+## Slide 21 — Random vs Time Splits (TabReD comparison)
 Layout: sample-21.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-XGBoost retrained with one change at a time (same split and seed).
-Visuals: tables/t09_ablation.md | figures/f09_ablation.png | charts_data/c05_ablation_deltas.csv
-Caption: Table 9: Ablation on 2015-2016. Fig. 9: Change vs the full model.
-Big numbers: -0.086 — ROC-AUC without demographics | -0.043 — without body measurements
+Random-split minus time-split test ROC-AUC per window and model with 95% CIs.
+- NHANES: up to +0.02 in 2015-16 (4/15 significant); MLP ranks 2nd under random but 4th under time splits.
+- BRFSS: +0.006 to +0.007 for every model; 9/15 significant (2021, 2022).
+- Natality: −0.003 to −0.006 (time looks better!).
+Visuals: figures/fig03_random_minus_time.png | tables/t06_random_vs_time.md | charts_data/c03_random_minus_time.csv
+Caption: Fig. 10: Random minus time ROC-AUC per sliding window.
+Big numbers: 2nd → 4th — MLP rank in NHANES, random → time
 Speaker notes:
-[REVIEW] Explain which feature group matters most and why threshold tuning changes F1 but not AUC.
+Positive = a random split would have promised more than the model delivers on the next period.
 
-## Slide 22 — Temporal Drift Analysis
+## Slide 22 — Same Test Period: Separating Time from Period Difficulty
 Layout: sample-21.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-KS per numeric feature and largest category shifts; prevalence 13.0% → 15.1%.
-Gaps (selected model): random − chronological -0.004 [-0.033, +0.023]; A2 in-period − future +0.036 [-0.001, +0.070].
-Visuals: figures/f10_feature_drift_ks.png | figures/f11_random_vs_temporal.png | tables/t10_period_gaps.md | charts_data/c06_ks_values.csv | charts_data/c07_category_shifts.csv | charts_data/c08_protocol_comparison.csv
-Caption: Fig. 10: Feature drift vs 2011-2012. Fig. 11: Test ROC-AUC by protocol. Table 10: Period gaps with 95% CIs.
-Big numbers: 0.057 — largest KS | 0.582 — domain classifier ROC-AUC
+TabReD's random and time test sets contain different periods. Scoring the random-split model only on the time split's test period:
+- Natality: difference vanishes (never significant) — later years are simply easier (0.735 on 2016 rows → 0.761 on 2020 rows).
+- BRFSS: random higher in 15 of 15 model-windows.
+- NHANES 2017-18: pooled random model significantly worse (≈ −0.04) — plausibly the lab-analyzer change.
+Visuals: figures/fig10_random_minus_time_same_period.png | tables/t07_random_vs_time_same_period.md | charts_data/c10_random_minus_time_same_period.csv
+Caption: Fig. 11: Random minus time on the same test period.
+Big numbers: 15 / 15 — BRFSS model-windows where random is optimistic on the same period
 Speaker notes:
-These statistics describe what changed, not why. [REVIEW] Discuss whether the gaps are conclusive given their CIs.
+Methodological contribution: without the same-period comparison, natality would look like "time splits are easier".
 
-## Slide 23 — Comparison with Published Work
+## Slide 23 — Drift and Its Clinical Causes
+Layout: sample-21.png
+Section label: SECTION 6 · EVALUATION AND RESULTS
+Presenter: 2
+Content:
+- Domain classifier ROC-AUC (time splits): NHANES 0.86–0.97, BRFSS 0.76–0.79, natality 0.55–0.59; random splits ≈0.50.
+- NHANES: lab analyzers replaced 2013-14 (RDW) and 2017-18 (LDH +14.9%, AST −18.0%); ACA 2014 (uninsured 25.6% → 15.2%).
+- BRFSS: questionnaire revisions 2021–22 (personal doctor, insurance, race); cell-phone sample.
+- Natality: California withholds marital status from 2017; hypertension doubles; smoking falls by two thirds.
+Visuals: figures/fig08_drift_events.png | figures/fig07_domain_shift.png | tables/t10_domain_classifier.md | tables/t11_drift_events.md | charts_data/c07_domain_classifier.csv | charts_data/c08_drift_events.csv
+Caption: Fig. 12: Documented changes per period. Fig. 13: Domain-classifier ROC-AUC.
+Big numbers: 0.97 — NHANES 2017-18 domain AUC (largest shift)
+Speaker notes:
+Sources: CDC/NCHS documentation (CBC_H, BIOPRO_J, BRFSS codebooks, NCHS natality user guides).
+
+## Slide 24 — Does Drift Explain the Gaps? / TabReD Table 4
 Layout: sample-22.png
 Section label: SECTION 6 · EVALUATION AND RESULTS
 Presenter: 2
 Content:
-Published TableShift BRFSS Diabetes accuracies next to ours.
-Fairness note: different survey (BRFSS vs NHANES), different shift (race vs time), accuracy depends on thresholds — not directly comparable.
-Visuals: tables/t11_literature_comparison.md
-Caption: Table 11: Published values (copied from TableShift Table 6) and this work.
-Big numbers: none
+- Largest covariate shift (NHANES 2017-18, domain AUC 0.97) → no significant gap; the significant NHANES gap comes with the label shift (prevalence 12.6% → 15.1%) and the ACA change.
+- BRFSS gaps appear in coding-revision years (2021, 2022), none in 2023.
+- TabReD Table 4: XGBoost's lead over the MLP does not shrink under time splits — NHANES +0.28% (random) → +0.97% (time).
+Visuals: tables/t12_drift_vs_performance.md | tables/t08_improvement_over_mlp.md
+Caption: Table 6: Drift vs performance per window. Table 7: % ROC-AUC improvement over the MLP.
+Big numbers: +0.97% — XGBoost over MLP, NHANES time splits (TabReD: the lead shrinks)
 Speaker notes:
-Values were copied exactly from the paper. [REVIEW] Explain why only the direction of the shift gap can be compared.
+Type of drift matters more than size.
 
-## Slide 24 — What the Results Mean
+## Slide 25 — What the Results Mean
 Layout: sample-23.png
 Section label: SECTION 7 · DISCUSSION
 Presenter: 2
 Content:
-Strengths: [REVIEW] real public data; three protocols; bootstrap CIs; fully reproducible notebook.
-Limitations: survey not EHR; unweighted models; self-reported label; possible reverse causation.
-Threats to validity: random vs chronological test sets contain different people; three cycles only; small grids.
-Visuals: none
-Caption: none
+Answers to TabReD's claims per dataset (table).
+Strengths: three real clinical sources; TabReD split construction; bootstrap CIs; documented drift causes; reproducible notebook.
+Limitations: one seed and small grids; no CatBoost / MLP-PLR; feature counts of BRFSS and natality below TabReD's; causal explanations are hypotheses; no survey weights.
+Visuals: tables/t13_research_questions.md
+Caption: Table 8: TabReD's claims on clinical data.
 Big numbers: none
 Speaker notes:
-Interpret, do not repeat numbers. [REVIEW] Rewrite the strengths in your own words.
+Interpret, do not repeat numbers.
 
-## Slide 25 — Conclusion and Future Work
+## Slide 26 — Conclusion and Future Work
 Layout: sample-24.png
 Section label: SECTION 8 · CONCLUSION AND FUTURE WORK
 Presenter: 2
 Content:
-Conclusion: [REVIEW] summarise the main finding in one or two sentences using the numbers below.
-Future work: 1 Add later NHANES cycles · 2 Survey-weighted training · 3 Calibration under prevalence shift · 4 Shift-aware model selection
+Conclusion: GBDTs stay best on clinical data. Random splits overestimate and reorder models where labels shift or questionnaires change (NHANES, BRFSS), not for preterm birth. Compare random and time splits on the same period.
+Future work: 1 More seeds and Optuna tuning · 2 MLP-PLR / FT-Transformer and CatBoost on GPU · 3 Shift-robust training (reweighting, recalibration under prevalence shift) · 4 EHR data with real deployment time
 Visuals: none
 Caption: none
-Big numbers: 0.791 — chronological ROC-AUC | 0.804 — random-split ROC-AUC (mean) | +0.036 — A2 in-period − future
+Big numbers: 3 — clinical datasets | 7 — splits each | 5 — models
 Speaker notes:
-Close on the main finding and two or three concrete next steps.
+Close on the main finding and the next steps.
 
-## Slide 26 — Code, Data and Academic Integrity
+## Slide 27 — Code, Data and Academic Integrity
 Layout: sample-25.png
 Section label: SUBMISSION
 Presenter: 2
 Content:
-1 Report: IEEE template, at least 8 pages, figures at 300 DPI
-2 Notebook: CSCI447P034.ipynb runs top to bottom in an empty folder
-3 Dataset: public CDC NHANES files, downloaded by the notebook (link in references)
-4 Integrity: every source cited in IEEE style; course similarity and AI-use rules must be checked by the students
+1 Notebook: CSCI447P034.ipynb — the full procedure; reproduces the saved results
+2 Code and results: project repository (scripts/, results_*/, figures/)
+3 Data: public CDC NHANES, BRFSS and NCHS natality files (links in references)
+4 Integrity: every source cited in IEEE style [CHECK course rules]
 Visuals: none
 Caption: none
 Big numbers: none
 Speaker notes:
-Phrase these as requirements; do not claim similarity or AI-detection scores.
+State requirements; do not claim similarity scores.
 
-## Slide 27 — References
+## Slide 28 — References
 Layout: sample-26.png
 Section label: SECTION 9 · REFERENCES
 Presenter: 2
 Content:
-IEEE-style list from references.md (numbered in order of first citation).
+IEEE-style list from references.md.
 Visuals: references.md
 Caption: none
 Big numbers: none
 Speaker notes:
-All references were opened and checked; see report/README.md for items to verify.
+—
 
-## Slide 28 — Thank You
+## Slide 29 — Thank You
 Layout: sample-27.png
 Section label: —
 Presenter: 2

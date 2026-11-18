@@ -1,0 +1,10 @@
+dataset,window,test,domain_auc_time,prevalence_train,prevalence_test,random_minus_time_mean,models_gap_significant,events_in_test_period
+nhanes,0,2013-2014,0.8640231803472164,0.11852080123266565,0.13053914327917282,-0.0061019989131191775,0,Hematology analyzer replaced by Beckman Coulter DxH 800; CDC: mean RDW 12.84% -> 13.55% (CBC_H docs)
+nhanes,1,2015-2016,0.920843771281351,0.126246640788295,0.15114104002992892,0.020491258722542448,4,Not covered by health insurance: falls after the 2014 Affordable Care Act coverage expansion | Covered by Medicaid: rises with the 2014 ACA Medicaid expansion
+nhanes,2,2017-2018,0.9742828230672449,0.12674439678608107,0.16398587681443702,0.0036976448310520383,0,Biochemistry analyzer and lab changed to Roche Cobas 6000; CDC bridging study: LDH +14.9% (BIOPRO_J docs) | Same 2017-2018 analyzer change; CDC bridging study: AST -18.0% (BIOPRO_J docs)
+brfss,0,2021,0.7902366,0.13770666666666667,0.13206,0.008499137917490907,5,"PERSDOC2 -> PERSDOC3 rewording: 'more than one personal doctor' jumps | Yes/no coverage question replaced by 'primary source of insurance' (CDC-derived series) | CDC-derived 'no coverage, age 18-64' follows the same 2021 question change"
+brfss,1,2022,0.7837404750000001,0.13564666666666667,0.13622,0.0076108707657324805,4,2022 race question: 'other race only' category removed
+brfss,2,2023,0.7656603125,0.13309333333333334,0.13866,0.005061375609473307,0,
+natality,0,2020,0.5698061125,0.09783333333333333,0.10312,-0.011080825712410137,3,Hospital COVID-19 policies: more births with unknown father information (NCHS User Guide)
+natality,1,2022,0.5639746375000001,0.10104,0.10472,-0.0026235911280833245,0,
+natality,2,2024,0.55207715,0.10486,0.10484,-0.0004985216981127528,0,

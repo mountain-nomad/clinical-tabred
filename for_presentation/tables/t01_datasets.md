@@ -1,0 +1,5 @@
+| dataset            | source                 | target                          |   rows |   features |   numeric |   categorical |   periods | positive_rate          |
+|:-------------------|:-----------------------|:--------------------------------|-------:|-----------:|----------:|--------------:|----------:|:-----------------------|
+| NHANES 2005-2018   | interview + exam + lab | diagnosed diabetes (DIQ010)     |  37287 |        280 |       102 |           178 |         7 | 13.3% (10.4% -> 16.4%) |
+| BRFSS 2017-2023    | telephone survey       | diagnosed diabetes (DIABETE3/4) | 350000 |         93 |        19 |            74 |         7 | 13.6% (13.7% -> 13.9%) |
+| Natality 2016-2024 | birth certificate      | preterm birth (< 37 weeks)      | 450000 |         73 |        16 |            57 |         9 | 10.2% (9.6% -> 10.5%)  |

@@ -4,7 +4,7 @@ Continues `docs/HANDOFF_EXPANDED_NHANES.md` (sections 8, 8b and 10). Both datase
 with the same rules as the NHANES wide table and run through the same benchmark script.
 **Status (16 Nov, 03:30): tables done, leakage checks done, all experiments done for all three
 datasets (benchmark, 5-fold CV, drift analysis). Results: `docs/RESULTS.md`, tables in
-`results_summary/`, figures in `figures_wide/`.**
+`results_summary/`, figures in `figures/`.**
 
 | | NHANES (done before) | BRFSS (new) | Natality (new) |
 |---|---|---|---|
@@ -38,9 +38,9 @@ questions (blank in even years) or engineering historical aggregates.
 python scripts/build_natality_table.py            # ~35 s, streams the 9 zips (no extraction)
 python scripts/parse_brfss_codebooks.py           # only if configs/brfss_codebook.json must be rebuilt
 python scripts/build_brfss_table.py               # ~1.5 min, reads the XPT files inside the zips
-python scripts/run_wide_benchmark.py --dataset brfss      # -> results_brfss/
-python scripts/run_wide_benchmark.py --dataset natality   # -> results_natality/
-python scripts/run_wide_benchmark.py                      # NHANES, unchanged -> results_wide/
+python scripts/run_benchmark.py --dataset brfss      # -> results_brfss/
+python scripts/run_benchmark.py --dataset natality   # -> results_natality/
+python scripts/run_benchmark.py                      # NHANES, unchanged -> results_nhanes/
 ```
 `--per-year N` changes the sample size (default 50,000, seed 42). `--quick` works for every dataset.
 
@@ -126,7 +126,7 @@ BRFSS XPT files (~1 GB each) are read straight from the zip with pandas.
   can appear in the same year. With 50,000 of ~3.7M births per year sampled, very few such pairs
   land in the sample.
 
-## Splits (`scripts/run_wide_benchmark.py`, `DATASETS`)
+## Splits (`scripts/run_benchmark.py`, `DATASETS`)
 
 | Dataset | Default (train / val / test) | Sliding windows (train 3, val 1, test 1) |
 |---|---|---|
@@ -153,10 +153,11 @@ come from the `type` column of `*_columns.csv` for the new datasets. The NHANES 
 | Natality | preterm rate 9.85% -> 10.49% (2021 peak) | label shift |
 
 ## Next steps
-1. Presentation (on another machine): storyline and numbers in `docs/RESULTS.md`, figures in
-   `figures_wide/` (PNG for slides, PDF for the report).
-2. Report and notebook were **not** updated to the three-dataset results in this session (out of
-   scope by decision on 16 Nov). The tables in `results_summary/summary.md` and the figures are ready
-   to drop in. `report/main.tex` and `notebooks/CSCI447P034.ipynb` still describe the original
-   9-feature NHANES 2011-2016 version.
-3. Optional: MLP-PLR / FT-Transformer (TabReD's strongest deep models) on the RTX 5080 GPU; CatBoost.
+1. Presentation (on another machine): everything is in `for_presentation/` (slide content in
+   `slides.md`, figures, diagrams, tables, chart data, key numbers); full write-up `docs/RESULTS.md`.
+2. Notebook: `notebooks/CSCI447P034.ipynb` now contains the whole three-dataset procedure (generated
+   by `scripts/build_notebook.py`, executed). The original 9-feature report, notebook, figures and
+   presentation pack were removed on 16 Nov (still in git history, commit `1dc9dba`).
+3. Report: not rewritten (out of scope by decision on 16 Nov); tables in `results_summary/` and
+   figures in `figures/` (PDF) are ready to drop in.
+4. Optional: MLP-PLR / FT-Transformer (TabReD's strongest deep models) on the RTX 5080 GPU; CatBoost.

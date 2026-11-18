@@ -2,6 +2,10 @@
 
 Each entry: **decision** → alternatives → reason.
 
+Entries 1-32 belong to the original 9-feature NHANES version; its pipeline and outputs (`results/`,
+report, old notebook and presentation pack) were removed on 16 Nov 2026 (decision 41) and remain in
+the git history (commit `1dc9dba`).
+
 ## Environment and inputs
 1. **Python 3.12 virtual environment (`.venv`)** → system Python 3.14 / conda → 3.12 has stable
    wheels for every dependency; versions pinned in `requirements.txt`.
@@ -122,4 +126,13 @@ Each entry: **decision** → alternatives → reason.
     XGBoost/LightGBM 10-50x (thread oversubscription).
 40. **Domain classifier subsamples each side to 20,000 rows** → all rows → runtime; same logistic
     regression + 5-fold CV as the original project.
-
+41. **Removed the original 9-feature version from the working tree** (16 Nov) → keep both → the old
+    pipeline (`clinical_tabred.run`) still wrote `results/`, `figures/`, `report/` and
+    `for_presentation/`, so running it would have overwritten the new material; everything stays in
+    the git history. Folders/scripts renamed without the `wide` prefix (`results_nhanes/`, `figures/`,
+    `run_benchmark.py`, ...).
+42. **The notebook is generated from the repository code and runs on saved results by default** →
+    a hand-written notebook that re-runs everything → the full benchmark takes ~3 h; by default the
+    notebook re-trains the selected configuration of every model on the default split and compares
+    with the saved results (14/15 identical; NHANES XGBoost differs by 0.0004 because the NHANES
+    benchmark ran on another computer), and `RUN_EXPERIMENTS = True` re-runs everything.

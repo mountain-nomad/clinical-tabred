@@ -1,4 +1,4 @@
-"""Run the experiments: tuning, evaluation per protocol, cross-validation and ablation."""
+"""Tuning on validation, evaluation of one split, and cross-validation."""
 
 import json
 import logging
@@ -12,16 +12,6 @@ from clinical_tabred.models import MODEL_NAMES, expand_grid, fit_model, predict_
 from clinical_tabred.prepare import feature_matrix
 
 logger = logging.getLogger("clinical_tabred")
-
-
-def base_settings(config: dict) -> dict:
-    """Settings shared by every model fit (features, seed, n_jobs, MLP loop length)."""
-    data_cfg = config["data"]
-    return {"numeric": list(data_cfg["numeric_features"]),
-            "categorical": list(data_cfg["categorical_features"]),
-            "seed": config["seed"], "n_jobs": config["n_jobs"], "balanced": True,
-            "max_epochs": config["mlp_training"]["max_epochs"],
-            "patience": config["mlp_training"]["patience"]}
 
 
 def fit_on_splits(name: str, params: dict, splits: dict, settings: dict) -> dict:
@@ -86,35 +76,6 @@ def evaluate_model(name: str, fitted: dict, splits: dict, settings: dict, tag: d
     return rows, pd.concat(predictions, ignore_index=True), threshold
 
 
-def run_protocol(protocol: str, seed: int, splits: dict, config: dict, settings: dict,
-                 fixed_params: dict | None = None) -> dict:
-    """Tune (unless `fixed_params` is given), fit and evaluate all five models.
-
-    Returns a dict of lists: metrics, tuning, predictions (per model), history,
-    plus the selected params and best MLP epoch for each model.
-    """
-    tag = {"protocol": protocol, "seed": seed}
-    out = {"metrics": [], "tuning": [], "predictions": {}, "history": [], "params": {},
-           "best_epoch": {}, "thresholds": {}}
-    for name in MODEL_NAMES:
-        if fixed_params is None:
-            fitted, params, rows = tune_model(name, config["models"][name], splits, settings, tag)
-            out["tuning"].extend(rows)
-        else:
-            params = fixed_params[name]
-            fitted = fit_on_splits(name, params, splits, settings)
-        metrics, predictions, threshold = evaluate_model(name, fitted, splits, settings, tag)
-        out["metrics"].extend(metrics)
-        out["predictions"][name] = predictions
-        out["params"][name], out["thresholds"][name] = params, threshold
-        out["best_epoch"][name] = fitted["best_epoch"]
-        if fitted["history"] is not None:
-            out["history"].append(fitted["history"].assign(**tag))
-        logger.info("%s seed=%s %s params=%s threshold=%.3f", protocol, seed, name, params,
-                    threshold)
-    return out
-
-
 def cross_validate(protocol: str, dev: pd.DataFrame, params: dict, best_epoch: dict,
                    config: dict, settings: dict) -> list[dict]:
     """Stratified K-fold CV on development data only (the test set is never touched).
@@ -139,38 +100,3 @@ def cross_validate(protocol: str, dev: pd.DataFrame, params: dict, best_epoch: d
                          **{k: metrics[k] for k in ["accuracy", "precision", "recall", "f1",
                                                     "roc_auc", "pr_auc"]}})
     return rows
-
-
-def ablation_variants(config: dict, settings: dict) -> list[tuple[str, dict, bool]]:
-    """(name, settings, use_tuned_threshold) for every ablation configuration."""
-    variants = [("full model", settings, True)]
-    for group, columns in config["data"]["feature_groups"].items():
-        reduced = {**settings,
-                   "numeric": [c for c in settings["numeric"] if c not in columns],
-                   "categorical": [c for c in settings["categorical"] if c not in columns]}
-        variants.append((f"without {group} features", reduced, True))
-    variants.append(("no class-imbalance handling", {**settings, "balanced": False}, True))
-    variants.append(("threshold 0.5 instead of tuned", settings, False))
-    return variants
-
-
-def run_ablation(name: str, params: dict, splits: dict, config: dict,
-                 settings: dict) -> pd.DataFrame:
-    """Retrain the selected model with one component changed at a time.
-
-    Same split, seed and hyperparameters as the full model; scores are on the
-    temporal test set and deltas are relative to the full model.
-    """
-    rows = []
-    for variant, variant_settings, tuned in ablation_variants(config, settings):
-        fitted = fit_on_splits(name, params, splits, variant_settings)
-        metrics, _, _ = evaluate_model(name, fitted, splits, variant_settings, {})
-        rule = "val_f1" if tuned else "0.5"
-        test = next(m for m in metrics if m["split"] == "test" and m["threshold_rule"] == rule)
-        rows.append({"model": name, "configuration": variant, "threshold": test["threshold"],
-                     "roc_auc": test["roc_auc"], "pr_auc": test["pr_auc"], "f1": test["f1"],
-                     "accuracy": test["accuracy"]})
-    ablation = pd.DataFrame(rows)
-    for metric in ["roc_auc", "pr_auc", "f1"]:
-        ablation[f"delta_{metric}"] = ablation[metric] - ablation.loc[0, metric]
-    return ablation

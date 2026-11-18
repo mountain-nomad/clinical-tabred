@@ -1,26 +1,28 @@
-# System architecture
+# Model pipeline (identical for every dataset and split)
 
-## Boxes
-1. **NHANES table 6 numeric + 3 categorical** (position x=0, y=2.4)
-2. **ColumnTransformer impute + scale / impute + one-hot (fit on train only)** (position x=2.9, y=2.4)
-3. **Logistic Regression** (position x=5.8, y=4.8)
-4. **Random Forest** (position x=5.8, y=3.6)
-5. **XGBoost** (position x=5.8, y=2.4)
-6. **LightGBM** (position x=5.8, y=1.2)
-7. **MLP (epoch loop, early stopping)** (position x=5.8, y=0.0)
-8. **Threshold max F1 on validation** (position x=8.7, y=2.4)
-9. **Metrics ROC/PR-AUC, F1, Brier, bootstrap CI** (position x=11.6, y=2.4)
+## Boxes (left to right, top to bottom)
+1. **Wide table**: NHANES 280 / BRFSS 93 / Natality 73 features
+2. **ColumnTransformer**: numeric: median + scale categorical: mode + one-hot (fit on train only)
+3. **Logistic Regression**: C grid, balanced
+4. **Random Forest**: depth / leaf grid
+5. **XGBoost**: scale_pos_weight
+6. **LightGBM**: scale_pos_weight
+7. **MLP**: epoch loop, early stopping
+8. **Model selection**: validation PR-AUC (ROC-AUC tiebreak)
+9. **Threshold**: max F1 on validation
+10. **Test, scored once**: metrics, confusion, bootstrap 95% CI
 
 ## Arrows
-- NHANES table 6 numeric + 3 categorical → ColumnTransformer impute + scale / impute + one-hot (fit on train only)
-- ColumnTransformer impute + scale / impute + one-hot (fit on train only) → Logistic Regression
-- ColumnTransformer impute + scale / impute + one-hot (fit on train only) → Random Forest
-- ColumnTransformer impute + scale / impute + one-hot (fit on train only) → XGBoost
-- ColumnTransformer impute + scale / impute + one-hot (fit on train only) → LightGBM
-- ColumnTransformer impute + scale / impute + one-hot (fit on train only) → MLP (epoch loop, early stopping)
-- Logistic Regression → Threshold max F1 on validation
-- Random Forest → Threshold max F1 on validation
-- XGBoost → Threshold max F1 on validation
-- LightGBM → Threshold max F1 on validation
-- MLP (epoch loop, early stopping) → Threshold max F1 on validation
-- Threshold max F1 on validation → Metrics ROC/PR-AUC, F1, Brier, bootstrap CI
+- Wide table -> ColumnTransformer
+- ColumnTransformer -> Logistic Regression
+- ColumnTransformer -> Random Forest
+- ColumnTransformer -> XGBoost
+- ColumnTransformer -> LightGBM
+- ColumnTransformer -> MLP
+- Logistic Regression -> Model selection
+- Random Forest -> Model selection
+- XGBoost -> Model selection
+- LightGBM -> Model selection
+- MLP -> Model selection
+- Model selection -> Threshold
+- Threshold -> Test, scored once

@@ -118,21 +118,6 @@ def unpaired_difference(y_a, prob_a, y_b, prob_b, metric, n_resamples: int,
     return {"diff": metric(y_a, prob_a) - metric(y_b, prob_b), "diff_low": low, "diff_high": high}
 
 
-def ci_table(predictions: pd.DataFrame, n_resamples: int, confidence: float,
-             seed: int) -> pd.DataFrame:
-    """Bootstrap CIs of ROC-AUC and PR-AUC for every (protocol, seed, model, split) group.
-
-    `predictions` has columns protocol, seed, model, split, label, probability.
-    """
-    rows = []
-    for keys, group in predictions.groupby(["protocol", "seed", "model", "split"], sort=False):
-        y, prob = group["label"].to_numpy(), group["probability"].to_numpy()
-        rows.append({**dict(zip(["protocol", "seed", "model", "split"], keys)),
-                     **metric_ci(y, prob, n_resamples, confidence, seed),
-                     "n": len(y), "n_pos": int(y.sum())})
-    return pd.DataFrame(rows)
-
-
 def paired_comparisons(test: pd.DataFrame, reference: str, n_resamples: int,
                        confidence: float, seed: int) -> pd.DataFrame:
     """Paired bootstrap: the reference model minus every other model on one test set."""
@@ -146,22 +131,4 @@ def paired_comparisons(test: pd.DataFrame, reference: str, n_resamples: int,
             conclusive = result["diff_low"] > 0 or result["diff_high"] < 0
             rows.append({"reference": reference, "other": other, "metric": name, **result,
                          "ci_excludes_zero": conclusive})
-    return pd.DataFrame(rows)
-
-
-def gap_table(first: pd.DataFrame, second: pd.DataFrame, label: str, n_resamples: int,
-              confidence: float, seed: int) -> pd.DataFrame:
-    """Per model: metric(first test set) - metric(second test set) with a bootstrap CI.
-
-    Used for "in-period holdout minus future cycle" and "random minus temporal".
-    """
-    rows = []
-    for model in first["model"].unique():
-        a, b = first[first["model"] == model], second[second["model"] == model]
-        for name, metric in [("roc_auc", roc_auc_score), ("pr_auc", average_precision_score)]:
-            result = unpaired_difference(a["label"].to_numpy(), a["probability"].to_numpy(),
-                                         b["label"].to_numpy(), b["probability"].to_numpy(),
-                                         metric, n_resamples, confidence, seed)
-            rows.append({"comparison": label, "model": model, "metric": name, **result,
-                         "ci_excludes_zero": result["diff_low"] > 0 or result["diff_high"] < 0})
     return pd.DataFrame(rows)

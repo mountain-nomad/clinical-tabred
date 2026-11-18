@@ -1,7 +1,7 @@
 # Handoff: Expanded NHANES benchmark (session of 15 Nov 2026)
 
 Everything needed to continue the project on another machine or in a new chat.
-Branch: `expanded-nhanes`. Read this first, then `results_wide/`.
+Branch: `expanded-nhanes`. Read this first, then `results_nhanes/`.
 
 ---
 
@@ -59,7 +59,7 @@ record, DIQ010 in {1, 2}.
 | 2017-2018 | 5,098 | 836 | 16.4% |
 | **Total** | **37,287** | **4,950** | |
 
-(2011-16 counts match the partner's `results/data_flow.csv` exactly. Prevalence rises steadily:
+(2011-16 counts match the original version's `results/data_flow.csv` (git history) exactly. Prevalence rises steadily:
 a real **label shift**.) Other cycles exist (1999-2004, 2017-Mar 2020 pre-pandemic, 2021-23) but
 2005-2018 has the most variables shared across all cycles (2021-23 cut most questionnaires).
 
@@ -71,7 +71,7 @@ Components used: DEMO, DIQ (target only), BMX, BPX, BPQ, SMQ, ALQ, PAQ, MCQ, KIQ
 SLQ, WHQ, CDQ, OCQ, DBQ, HSQ, PFQ, DUQ, RHQ, TCHOL, HDL, TRIGLY, BIOPRO, CBC, ALB_CR.
 Never downloaded (label-encoding): GLU, GHB (HbA1c), INS, OGTT, RXQ_RX (prescriptions).
 
-### Cleaning rules (all in `scripts/build_wide_table.py`)
+### Cleaning rules (all in `scripts/build_nhanes_table.py`)
 1. Merge the 28 files per cycle on SEQN (checked: one row per person in every file); stack cycles;
    keep only columns present in all 7 cycles; add `cycle`, `start_year`, `label`.
 2. Drop admin/weights/design columns, lab comment codes, SI-unit duplicates, unit duplicates.
@@ -87,7 +87,7 @@ Never downloaded (label-encoding): GLU, GHB (HbA1c), INS, OGTT, RXQ_RX (prescrip
    - **BPQ090D/BPQ100D** cholesterol prescription: guideline treatment for diagnosed diabetics;
    - **PFQ063A-E "Health problem causing difficulty"**: answer code **16 = Diabetes** (the label).
      Found AFTER the first full run: it inflated LightGBM-like models from 0.899 to 0.924.
-     The first run's results were discarded; `results_wide/` is the clean re-run.
+     The first run's results were discarded; `results_nhanes/` is the clean re-run.
    - Kept on purpose: MCQ300C "close relative had diabetes" (family history is known before diagnosis).
    - A scan of every remaining feature's answer options in the CDC codebooks found no other
      diabetes/insulin/sugar/glucose codes. No single feature has univariate ROC-AUC above 0.74 (age).
@@ -102,7 +102,7 @@ the benchmark asserts train/val/test SEQN sets are disjoint).
 
 ---
 
-## 4. Benchmark design (`scripts/run_wide_benchmark.py`)
+## 4. Benchmark design (`scripts/run_benchmark.py`)
 
 Reuses the original pipeline's code (`clinical_tabred.experiment.tune_model/evaluate_model`, bootstrap
 CIs in `clinical_tabred.evaluation`), so the method matches the original project.
@@ -126,7 +126,7 @@ Bootstrap: 1,000 resamples, 95% CIs. Run time on Yelzhan's laptop ~30 min.
 
 ---
 
-## 5. Final results (clean run, `results_wide/`)
+## 5. Final results (clean run, `results_nhanes/`)
 
 ### Test ROC-AUC per split
 | Model | Default | Win 0 | Win 1 | Win 2 | Random 0 | Random 1 | Random 2 |
@@ -187,16 +187,16 @@ citations; plagiarism < 10%, **AI-generated content < 20%**.
 | Item | Status |
 |---|---|
 | Expanded NHANES dataset + leakage cleaning | Done |
-| 5 models x 7 splits, bootstrap CIs, random-vs-time, rankings | Done (`results_wide/`) |
-| Accuracy/precision/recall/F1/ROC-AUC/PR-AUC | Done (`results_wide/metrics.csv`) |
-| Test predictions (for ROC curves, confusion matrices) | Done (`results_wide/predictions/test_predictions.csv`) |
-| MLP training curves data | Done (`results_wide/mlp_history.csv`) |
-| 5-fold cross-validation | Done for all three datasets (`scripts/run_wide_cv.py`, `docs/RESULTS.md` 2.7) |
+| 5 models x 7 splits, bootstrap CIs, random-vs-time, rankings | Done (`results_nhanes/`) |
+| Accuracy/precision/recall/F1/ROC-AUC/PR-AUC | Done (`results_nhanes/metrics.csv`) |
+| Test predictions (for ROC curves, confusion matrices) | Done (`results_nhanes/predictions/test_predictions.csv`) |
+| MLP training curves data | Done (`results_nhanes/mlp_history.csv`) |
+| 5-fold cross-validation | Done for all three datasets (`scripts/run_cv.py`, `docs/RESULTS.md` 2.7) |
 | Drift characterised by clinical cause | Done (`scripts/analyze_drift.py`, `docs/RESULTS.md` 2.5-2.6) |
 | Second and third datasets (benchmark = several datasets) | Done: BRFSS (93 features) and natality (73), full benchmark run (`docs/RESULTS.md`, `docs/HANDOFF_BRFSS_NATALITY.md`) |
 | More deep tabular models (TabReD compares several) | Optional TODO |
-| Slides updated to the new results | TODO (inputs ready: `docs/RESULTS.md`, `figures_wide/`) |
-| Notebook `ProjectID.ipynb` updated to the new pipeline | TODO |
+| Slides updated to the new results | Inputs ready in `for_presentation/` (slides made with Claude Design) |
+| Notebook `ProjectID.ipynb` updated to the new pipeline | Done (`notebooks/CSCI447P034.ipynb`, three datasets) |
 | Report rewritten with new results; [REVIEW] passages in own words | TODO |
 
 ---
@@ -276,19 +276,19 @@ uv pip install -r requirements.txt
 uv pip install -e .
 # Only if you need to rebuild the table (it is committed):
 powershell -ExecutionPolicy Bypass -File scripts\download_nhanes.ps1   # Windows; 196 files, 321 MB
-python scripts\build_wide_table.py                                       # ~40 s
+python scripts\build_nhanes_table.py                                       # ~40 s
 # Re-run the benchmark (~30 min); --quick for a smoke test; --models / --splits for subsets:
-python scripts\run_wide_benchmark.py
+python scripts\run_benchmark.py
 ```
 
 Files:
-- `scripts/build_wide_table.py`: builds the wide table (all cleaning/leakage rules above).
-- `scripts/run_wide_benchmark.py`: TabReD-style splits, tuning, evaluation, summary tables.
+- `scripts/build_nhanes_table.py`: builds the wide table (all cleaning/leakage rules above).
+- `scripts/run_benchmark.py`: TabReD-style splits, tuning, evaluation, summary tables.
 - `scripts/download_nhanes.ps1`, `scripts/download_brfss.ps1`: CDC downloaders (Windows PowerShell).
 - `configs/nhanes_missing_codes.json`: refused/don't-know codes from the CDC codebooks.
 - `data/processed/nhanes_wide_columns.csv`: every feature with source file, CDC label, % missing.
 - `data/processed/nhanes_wide_flow.csv`: eligibility counts per cycle.
-- `results_wide/`: `test_roc_auc_by_split.csv`, `metrics.csv`, `default_test_ci.csv`,
+- `results_nhanes/`: `test_roc_auc_by_split.csv`, `metrics.csv`, `default_test_ci.csv`,
   `default_paired_comparisons.csv`, `random_minus_time_by_window.csv`, `random_minus_time_mean.csv`,
   `ranking_time_vs_random.csv`, `predictions/test_predictions.csv`, `mlp_history.csv`, `tuning.csv`,
   `selected_models.json`, `splits.csv`, `feature_types.csv`.
@@ -305,7 +305,7 @@ Goal: every dataset goes through the SAME benchmark so results are comparable.
 1. Build ONE wide table per dataset: one row per respondent/birth, a time column (year, or
    year-month), the binary target, and features present in every year of the chosen window
    (TabReD-style: keep realistic/noisy features; do not curate for usefulness).
-2. Same cleaning rules as `scripts/build_wide_table.py`: refused/don't-know/unknown codes -> missing
+2. Same cleaning rules as `scripts/build_nhanes_table.py`: refused/don't-know/unknown codes -> missing
    (from the official codebook), drop admin/weight/ID columns, "mark all that apply" -> 0/1,
    drop columns > 95% empty, never drop rows for missing values.
 3. **Leakage checks before any training** (each one found a real leak in NHANES):
@@ -317,10 +317,10 @@ Goal: every dataset goes through the SAME benchmark so results are comparable.
    e. after training, check the most important features of the GBDT models; if GBDTs beat
       linear models by a lot, look for a leak the trees can exploit (that is how PFQ063 was found).
 4. Same splits: default time split + 3 sliding windows + 3 size-matched random splits
-   (copy `make_splits` from `scripts/run_wide_benchmark.py`; adapt the list of periods).
+   (copy `make_splits` from `scripts/run_benchmark.py`; adapt the list of periods).
    Subsample large datasets per year (e.g. 50,000 rows/year) with a fixed seed.
 5. Same models, grids, tuning (validation PR-AUC), threshold (validation max F1), bootstrap CIs,
-   random-minus-time table and ranking table. Easiest: generalise `run_wide_benchmark.py` to take
+   random-minus-time table and ranking table. Easiest: generalise `run_benchmark.py` to take
    the table path and the period column as arguments.
 6. Add 5-fold CV (course requirement) for all datasets.
 7. Record the clinical cause of each drift (protocol change / coding revision / population shift)
@@ -331,7 +331,7 @@ Goal: every dataset goes through the SAME benchmark so results are comparable.
 ## 11. Immediate next steps
 1. Presentation (16 Nov): update the deck with section 5 results; add a slide "Toward a Clinical
    TabReD benchmark": NHANES done; BRFSS (and maybe Mexico COVID) next; drift-by-clinical-cause plan.
-2. Add 5-fold CV to `run_wide_benchmark.py` (on the training+validation years only).
+2. Add 5-fold CV to `run_benchmark.py` (on the training+validation years only).
 3. BRFSS and natality pipelines (section 10): loaders, harmonised features, targets, leakage checks,
    same benchmark.
 4. Drift analysis by clinical cause (section 7) and link to the per-window performance gaps.

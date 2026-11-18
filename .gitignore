@@ -5,28 +5,20 @@ __pycache__/
 .ruff_cache/
 *.egg-info/
 .ipynb_checkpoints/
-data/raw/*.xpt
-report/build/
-report/*.aux
-report/*.log
-report/*.out
-report/*.bbl
-report/*.blg
-report/*.fls
-report/*.fdb_latexmk
 .DS_Store
-results_quick/
-figures_quick/
 
-# Large generated table (rebuild with: python scripts/build_wide_table.py)
+# Raw data (download instructions in README.md)
+data/raw/*.xpt
+data/raw/brfss/
+data/raw/natality/
+
+# Large generated table (rebuild with: python scripts/build_nhanes_table.py)
 data/processed/nhanes_wide_2005_2018.csv
 
-# BRFSS raw files (download with scripts/download_brfss.ps1)
-data/raw/brfss/
-
-# Natality raw files (2 GB; NCHS public-use zips, see docs/HANDOFF_BRFSS_NATALITY.md)
-data/raw/natality/
+# Smoke-test output (run_benchmark.py --quick) and the notebook's own output folder
 results_*_quick/
+notebooks/outputs/
+
 # Large prediction files: the gzipped copies (*.csv.gz) are committed instead
 results_brfss/predictions/test_predictions.csv
 results_natality/predictions/test_predictions.csv

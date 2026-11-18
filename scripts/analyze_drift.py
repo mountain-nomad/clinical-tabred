@@ -36,7 +36,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from clinical_tabred.drift import psi  # noqa: E402
 from clinical_tabred.models import make_preprocessor  # noqa: E402
 from clinical_tabred.prepare import feature_matrix  # noqa: E402
-from run_wide_benchmark import DATASETS, load_dataset, make_splits  # noqa: E402
+from run_benchmark import DATASETS, load_dataset, make_splits  # noqa: E402
 
 # (column, statistic, code, cause type, period of the change, description)
 # statistic: "mean" of the column, "share" of rows equal to `code`, "missing" share.
@@ -156,64 +156,86 @@ def event_table(data, events, periods) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--dataset", default="nhanes", choices=list(DATASETS))
-    args = ap.parse_args()
-    config = yaml.safe_load((ROOT / "configs" / "experiment.yaml").read_text())
-    seed, spec = config["seed"], DATASETS[args.dataset]
-    out = ROOT / spec["out"]
-    periods = spec["periods"]
-    data, numeric, categorical = load_dataset(args.dataset)
+def period_table(data, periods) -> pd.DataFrame:
+    """Rows and label prevalence per period."""
+    return data.groupby("cycle").agg(n=("label", "size"), prevalence=("label", "mean")).reindex(periods)
 
-    per = data.groupby("cycle").agg(n=("label", "size"), prevalence=("label", "mean")).reindex(periods)
-    per.to_csv(out / "drift_periods.csv")
 
-    splits = make_splits(data, seed, spec)
+def domain_table(data, splits, numeric, categorical, periods, seed: int, verbose: bool = True) -> pd.DataFrame:
+    """Domain-classifier ROC-AUC: train vs test of every split, and each pair of adjacent periods."""
     dom = []
     for name, parts in splits.items():
         auc = domain_auc(parts["train"], parts["test"], numeric, categorical, seed)
         dom.append({"comparison": f"{name}: train vs test", "kind": "random" if name.startswith("random")
                     else "time", "split": name, "roc_auc": auc})
-        print(f"domain {name:18s} train vs test ROC-AUC {auc:.3f}", flush=True)
+        if verbose:
+            print(f"domain {name:18s} train vs test ROC-AUC {auc:.3f}", flush=True)
     for p, q in zip(periods[:-1], periods[1:]):
         auc = domain_auc(data[data["cycle"] == p], data[data["cycle"] == q], numeric, categorical, seed)
         dom.append({"comparison": f"{p} vs {q}", "kind": "adjacent", "split": "", "roc_auc": auc})
-        print(f"domain {p} vs {q} ROC-AUC {auc:.3f}", flush=True)
-    dom = pd.DataFrame(dom)
-    dom.to_csv(out / "drift_domain.csv", index=False)
+        if verbose:
+            print(f"domain {p} vs {q} ROC-AUC {auc:.3f}", flush=True)
+    return pd.DataFrame(dom)
 
-    feat = feature_drift(data, numeric, categorical, periods)
-    feat.to_csv(out / "drift_features.csv", index=False)
-    events = event_table(data, EVENTS[args.dataset], periods)
-    events.to_csv(out / "drift_events.csv", index=False)
 
+def drift_performance(gaps: pd.DataFrame, splits, dom: pd.DataFrame, events: pd.DataFrame, spec: dict) -> pd.DataFrame:
+    """One row per sliding window: time vs random test ROC-AUC next to the drift measured for it."""
+    periods = spec["periods"]
+    gaps = gaps[gaps["metric"] == "roc_auc"]
+    rows = []
+    for k, start in enumerate(spec["windows"]):
+        g = gaps[gaps["window"] == k]
+        w = splits[f"sliding-window-{k}"]
+        test_p = periods[start + 4]
+        hit = events[events["change_at"].isin([test_p])]["description"].tolist() if not events.empty else []
+        rows.append({"window": k, "train": f"{periods[start]}..{periods[start + 2]}",
+                     "val": periods[start + 3], "test": test_p,
+                     "time_roc_auc_mean": g["time"].mean(), "random_roc_auc_mean": g["random"].mean(),
+                     "random_minus_time_mean": g["diff"].mean(),
+                     "models_gap_significant": int(g["ci_excludes_zero"].sum()), "n_models": len(g),
+                     "domain_auc_time": dom.loc[dom["split"] == f"sliding-window-{k}", "roc_auc"].item(),
+                     "domain_auc_random": dom.loc[dom["split"] == f"random-{k}", "roc_auc"].item(),
+                     "prevalence_train": w["train"]["label"].mean(),
+                     "prevalence_test": w["test"]["label"].mean(),
+                     "events_in_test_period": " | ".join(hit)})
+    return pd.DataFrame(rows)
+
+
+def run_drift(dataset: str, verbose: bool = True) -> dict[str, pd.DataFrame]:
+    """All drift tables of one dataset; written to its results directory."""
+    config = yaml.safe_load((ROOT / "configs" / "experiment.yaml").read_text())
+    seed, spec = config["seed"], DATASETS[dataset]
+    out = ROOT / spec["out"]
+    periods = spec["periods"]
+    data, numeric, categorical = load_dataset(dataset)
+    tables = {"drift_periods": period_table(data, periods)}
+    tables["drift_periods"].to_csv(out / "drift_periods.csv")
+
+    splits = make_splits(data, seed, spec)
+    tables["drift_domain"] = domain_table(data, splits, numeric, categorical, periods, seed, verbose)
+    tables["drift_features"] = feature_drift(data, numeric, categorical, periods)
+    tables["drift_events"] = event_table(data, EVENTS[dataset], periods)
+    for name in ["drift_domain", "drift_features", "drift_events"]:
+        tables[name].to_csv(out / f"{name}.csv", index=False)
     gaps_file = out / "random_minus_time_by_window.csv"
     if gaps_file.exists():
-        gaps = pd.read_csv(gaps_file)
-        gaps = gaps[gaps["metric"] == "roc_auc"]
-        rows = []
-        for k, start in enumerate(spec["windows"]):
-            g = gaps[gaps["window"] == k]
-            w = splits[f"sliding-window-{k}"]
-            test_p = periods[start + 4]
-            hit = events[events["change_at"].isin([test_p])]["description"].tolist() if not events.empty else []
-            rows.append({"window": k, "train": f"{periods[start]}..{periods[start + 2]}",
-                         "val": periods[start + 3], "test": test_p,
-                         "time_roc_auc_mean": g["time"].mean(), "random_roc_auc_mean": g["random"].mean(),
-                         "random_minus_time_mean": g["diff"].mean(),
-                         "models_gap_significant": int(g["ci_excludes_zero"].sum()), "n_models": len(g),
-                         "domain_auc_time": dom.loc[dom["split"] == f"sliding-window-{k}", "roc_auc"].item(),
-                         "domain_auc_random": dom.loc[dom["split"] == f"random-{k}", "roc_auc"].item(),
-                         "prevalence_train": w["train"]["label"].mean(),
-                         "prevalence_test": w["test"]["label"].mean(),
-                         "events_in_test_period": " | ".join(hit)})
-        pd.DataFrame(rows).to_csv(out / "drift_performance.csv", index=False)
-        print(pd.DataFrame(rows).drop(columns="events_in_test_period").round(4).to_string(index=False))
+        tables["drift_performance"] = drift_performance(pd.read_csv(gaps_file), splits, tables["drift_domain"],
+                                                        tables["drift_events"], spec)
+        tables["drift_performance"].to_csv(out / "drift_performance.csv", index=False)
+    return tables
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--dataset", default="nhanes", choices=list(DATASETS))
+    tables = run_drift(ap.parse_args().dataset)
+    if "drift_performance" in tables:
+        print(tables["drift_performance"].drop(columns="events_in_test_period").round(4).to_string(index=False))
+    feat = tables["drift_features"]
     print("\nTop drifting features (first vs last period):")
     print(feat.head(12)[["feature", "type", "drift_score", "missing_first", "missing_last",
                          "max_step", "max_step_between"]].round(3).to_string(index=False))
-    print("\nEvents:\n" + events.drop(columns="description").round(4).to_string(index=False))
+    print("\nEvents:\n" + tables["drift_events"].drop(columns="description").round(4).to_string(index=False))
 
 
 if __name__ == "__main__":
