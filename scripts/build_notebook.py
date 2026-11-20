@@ -351,7 +351,7 @@ separation) and the figure helpers used throughout the notebook:
     add(code(defs("src/clinical_tabred/plotting.py", "MODEL_LABELS", "MODEL_COLORS", "CYCLE_COLORS",
                   "INK", "apply_style") + "\n\n\n"
              + defs("scripts/make_figures.py", "NAMES", "MODELS", "CAPTIONS", "res", "present", "panels",
-                    "model_legend", "save") + '''
+                    "model_legend", "save", "DIFF_LIM", "diff_axis") + '''
 
 
 def show(name: str):
