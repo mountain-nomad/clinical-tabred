@@ -62,6 +62,15 @@ def save(fig, name: str, caption: str):
     print("saved", name)
 
 
+DIFF_LIM = 0.10   # fixed y-range for the random-minus-time figures (all panels, both figures)
+
+
+def diff_axis(ax):
+    """Same symmetric ROC-AUC scale on every panel, so ~0.01 differences are not blown up by autoscaling."""
+    ax.set_ylim(-DIFF_LIM, DIFF_LIM)
+    ax.set_yticks(np.arange(-DIFF_LIM, DIFF_LIM + 1e-9, 0.05))
+
+
 def fig_prevalence():
     dss = present("drift_periods.csv")
     fig, axes = panels(len(dss), 2.8)
@@ -107,6 +116,7 @@ def fig_random_vs_time():
         ax.axhline(0, color=INK, lw=0.8)
         ax.set_xticks(range(len(windows)), [f"window {w}\ntest {str(t)[:4]}" for w, t in zip(windows, test)])
         ax.set_title(NAMES[ds]); ax.set_ylabel("ROC-AUC: random minus time")
+        diff_axis(ax)
     model_legend(fig)
     save(fig, "fig03_random_minus_time",
          "Random-split minus time-split test ROC-AUC per sliding window and model (95% bootstrap CI). "
@@ -252,6 +262,7 @@ def fig_same_period():
         periods = g.drop_duplicates("window").set_index("window")["test_period"].reindex(windows)
         ax.set_xticks(range(len(windows)), [f"window {w}\ntest {str(t)[:4]}" for w, t in zip(windows, periods)])
         ax.set_title(NAMES[ds]); ax.set_ylabel("ROC-AUC: random minus time\n(same test period)")
+        diff_axis(ax)
     model_legend(fig)
     save(fig, "fig10_random_minus_time_same_period",
          "Random minus time ROC-AUC when both are scored on the SAME period (the time split's test period; "
